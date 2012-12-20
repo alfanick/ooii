@@ -1,0 +1,40 @@
+{\rtf1\ansi\ansicpg1250\cocoartf1187\cocoasubrtf340
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\info
+{\title Tutorial z Gita}}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\slleading147\sa166\pardirnatural
+
+\f0\fs36\fsmilli18464 \cf0 0. Pod Win, google git i pobieramy, pod linuksem apt-get czy co\uc0\u347  i mamy (albo od razu go mamy), pod makiem mamy od razu, ale z brew jest nowszy.\
+\
+1. Pod\uc0\u322 \u261 czamy si\u281  do repo (robimy to tylko raz!):\
+	- windowsy robi\uc0\u261  git clone https://github.com/alfanick/ooii.git, podaj\u261  usera i has\u322 o ze swojego githuba\
+	- uniksy robi\uc0\u261  git clone git@github.com:alfanick/ooii.git, po wcze\u347 niejszym dodaniu klucza do githuba (w settingsach, a klucz dostajemy z ssh-keygen -y)\
+\
+A teraz cykl pracy:\
+2. Nim sobie odpalimy netbeansa zawsze wchodzimy do naszego projektu i robimy\
+	git pull --all\
+To nam pobiera zmiany z repozytorium. Jak b\uc0\u281 dziemy s\u322 ucha\u263  i robili git pull przed zmianami to b\u281 dziecie mieli mniej merg\'f3w.\
+[w tym momencie, ogarniaj\uc0\u261 cy gita, tworz\u261  sobie brancha do pracy i pracuj\u261  na nim]\
+Klepiemy sobie kod. Naklepali\uc0\u347 my 
+\b bezb\uc0\u322 \u281 dny
+\b0  kod i taki 
+\b bezb\uc0\u322 \u281 dny
+\b0  kod wrzucamy z powrotem do repo.\
+	git status # pokazuje nam zmiany jakie zrobilismy\
+	git commit -a # wrzuca wszystkie zmiany, prosi o wiadomosc z opisem, wpisujemy 
+\b dok\uc0\u322 adnie
+\b0  co napisali\uc0\u347 my i dlaczego tak, po polsku\
+	git push --all # wrzucamy wszystkie nasze branche do githuba\
+\
+Niby fajnie, ale co si\uc0\u281  mo\u380 e sta\u263 ? Kto\u347  mo\u380 e w mi\u281 dzyczasie (w czasie od pobrania najnowszej wersji do wys\u322 ania naszej nowej wersji) zmieni\u263  ten sam plik. Co wtedy?\
+Wyskakuje b\uc0\u322 \u261 d przy pushu/commicie, \u380 e jeste\u347 my do ty\u322 u \'96 wtedy robimy git pull --all, a potem git merge master (albo nasz branch). Dostajemy info w jakich plikach co\u347  si\u281 \'a0posypa\u322 o (luuz), mo\u380 emy to te\u380 \'a0sprawdzi\u263  przy pomocy git status. Otwieramy te pliki i widzimy co\u347  w stylu:\
+\
+	<<<<<<< HEAD:index.html\
+	<div id="footer">contact : email.support@github.com</div>\
+	=======\
+	<div id="footer">\
+ 		please contact us at support@github.com\
+	</div>\
+	>>>>>>> iss53:index.html\
+\
+Dostali\uc0\u347 my to u g\'f3ry, a chcemy da\u263  to na dole. Robimy z tego jaki\u347  kompromis, zapisujemy i robimy normalnego commita (z pi\u281 knym opisem dlaczego tak si\u281 \'a0sta\u322 o i co si\u281 \'a0sta\u322 o) \'96 powinno by\u263  ok.}
