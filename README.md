@@ -1,4 +1,4 @@
 ooii
 ====
 
-Projekt na Programowanie Obiektowe
+Cutting-edge implementation of commonly known board game "Gomoku" written in Java
