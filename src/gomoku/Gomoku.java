@@ -1,20 +1,29 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package gomoku;
 
+import gomoku.ui.*;
+
 /**
+ * Main game class. Creates the threads,
  *
- * @author alfanick
+ * @author Amadeusz Juskowiak
  */
 public class Gomoku {
+    /**
+     * Game logic thread.
+     */
+    public static Game game;
+    
+    /**
+     * Game GUI.
+     */
+    public static GomokuUI ui;
 
     /**
+     * Main program loop. Creates game logic and GUI.
+     * 
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
         System.out.println("Hello, World!");
     }
 }
