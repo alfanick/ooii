@@ -82,11 +82,7 @@ public class GomokuReferee {
                 }
                 
                 //state of a field depends on which of players takes turn
-                if(player == 0){
-                    previousBoard.set(position, GomokuBoardState.A );
-                }else{
-                    previousBoard.set(position, GomokuBoardState.B);
-                }
+                previousBoard.set(position, GomokuBoardState.values()[player]);
                 
                 //checking if one of players won
                 if(puttedMInRow(position, rules.getInRowToWin(), player)){
@@ -143,7 +139,7 @@ public class GomokuReferee {
         for(i=0; i<rules.getSizeRectangle().x; i++){
             for(j=0; j<rules.getSizeRectangle().y; j++){
                 Point p = new Point(i,j);
-                if(previousBoard.get(p).ordinal() != Gomoku.game.board.get(p).ordinal()){
+                if(previousBoard.get(p) != Gomoku.game.board.get(p)){
                     throw new CorruptedBoardException(p);
                 }
             }

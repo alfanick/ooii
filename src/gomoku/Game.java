@@ -140,10 +140,12 @@ public class Game implements Runnable {
                         // Put a pawn
                         this.board.set(move, GomokuBoardState.values()[this.currentPlayer]);
 
+                        System.out.println("Poprawny ruch");
                         // Let UI draw new pawn
                         // Gomoku.ui.gomokuUIBoard.refresh();
                     }
                 } catch (IllegalMoveException ex) {
+                    System.out.println("Zły ruch, losuje");
 
                     // See above
                     if (firstMove) {
@@ -175,6 +177,7 @@ public class Game implements Runnable {
             // Gomoku.ui.showCorruptedBoard(this.currentPlayer, ex);
 
             // Game is finished
+            System.out.println("Uszkodzona plansza, koniec");
             
         } catch (GameEndedException ex) {
             // Player won the game!
@@ -182,6 +185,7 @@ public class Game implements Runnable {
             // Gomoku.ui.showGameEnded(this.currentPlayer, ex);
 
             // Game is finished
+            System.out.println("Koniec gry");
 
         }
     }
