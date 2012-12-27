@@ -133,8 +133,8 @@ public class GomokuUI extends JFrame implements Runnable  {
         timeLabel.setFont(new Font("Verdana", Font.BOLD, 24));
         timeLabel.setBounds(80, 540, 140, 50);
         
-        //GomokuUIBoard gomokuUIBoard = new GomokuUIBoard();
-        //gomokuUIBoard.setBounds(300, 0, 900, 900);
+        GomokuUIBoard gomokuUIBoard = new GomokuUIBoard();
+        gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
         panel.add(player1);
@@ -145,7 +145,7 @@ public class GomokuUI extends JFrame implements Runnable  {
         panel.add(stopButton);
         panel.add(pauseButton);
         panel.add(timeLabel);
-        //panel.add(gomokuUIBoard);
+        panel.add(gomokuUIBoard);
               
         show();
     }
