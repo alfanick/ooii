@@ -1,6 +1,7 @@
 package gomoku;
 
 import gomoku.exceptions.CorruptedBoardException;
+import gomoku.exceptions.DrawGameEndedException;
 import gomoku.exceptions.GameEndedException;
 import gomoku.exceptions.IllegalMoveException;
 import gomoku.player.PlayerInterface;
@@ -182,8 +183,9 @@ public class Game implements Runnable {
 
             // Game is finished
             System.out.printf("Uszkodzona plansza, koniec (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
-            
-        } catch (GameEndedException ex) {
+            System.out.printf("Wygrał %d!\n", this.currentPlayer);
+        }
+        catch (GameEndedException ex) {
             // Player won the game!
             // UI shows some dialog and finished game
             // Gomoku.ui.showGameEnded(this.currentPlayer, ex);
@@ -191,8 +193,14 @@ public class Game implements Runnable {
             // Game is finished
             System.out.printf("Koniec gry (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
 
-                        this.board.set(ex.getPosition(), GomokuBoardState.values()[(this.currentPlayer+1)%2]);
-                        this.board.print("KONIEC");
+            this.board.set(ex.getPosition(), GomokuBoardState.values()[(this.currentPlayer+1)%2]);
+            this.board.print("KONIEC");
+            
+            if (ex instanceof DrawGameEndedException) {
+                System.out.println("Remis!");
+            } else {
+                System.out.printf("Wygrał %d!\n", (this.currentPlayer+1)%2);
+            }
         }
     }
 }
