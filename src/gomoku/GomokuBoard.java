@@ -51,6 +51,25 @@ public class GomokuBoard {
     }
     
     /**
+     * Cleans the board, with FORBIDDEN state margin.
+     * Creates the board with FORBIDDEN state on every field
+     * except for allowed rectangle (where state is EMPTY).
+     * 
+     * @param allowed Rectangle of allowence
+     * @see GomokuBoardState#FORBIDDEN
+     * @see GomokuBoardState#EMPTY
+     */
+    public final void cleanWithForbidden(Rectangle allowed) {
+        this.sweep(GomokuBoardState.FORBIDDEN);
+        
+        for (int x = 0; x < allowed.width; x++) {
+            for (int y = 0; y < allowed.height; y++) {
+                this.board[x+allowed.x][y+allowed.y] = GomokuBoardState.EMPTY;
+            }
+        }
+    }
+    
+    /**
      * Sets all fields on board to given state.
      * 
      * @param state State of board

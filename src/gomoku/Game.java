@@ -74,6 +74,8 @@ public class Game implements Runnable {
         this.playersTime[0] = aTime;
         this.playersTime[1] = bTime;
         
+        this.board = new GomokuBoard(rules.getSizeRectangle());
+        this.board.cleanWithForbidden(rules.getFirstMoveRectangle());
     }
     
     /**
@@ -87,6 +89,9 @@ public class Game implements Runnable {
         
         // WHITE starts
         this.currentPlayer = 0;
+        
+        // It is a first move
+        boolean firstMove = true;
         
         // Game loop
         while (true) {
@@ -122,12 +127,27 @@ public class Game implements Runnable {
             try {
                 // Player can move
                 if (this.referee.canMove(this.currentPlayer, move)) {
+                    // The move is correct and its first move, so
+                    // there might be some FORBIDDEN fields. We don't want
+                    // them after first move - so set board to EMPTY and
+                    // then put a pawn
+                    if (firstMove) {
+                        this.board.clean();
+                    }
+                    
+                    // Put a pawn
                     this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
+                    
                     // Let UI draw new pawn
                     // Gomoku.ui.gomokuUIBoard.refresh();
                 }
             } catch (IllegalMoveException ex) {
                 Random random = new Random();
+                
+                // See above
+                if (firstMove) {
+                    this.board.clean();
+                }
                 
                 // Illegal move is made - random move should be done
                 // Pawn should be put on random EMPTY field
@@ -160,6 +180,9 @@ public class Game implements Runnable {
                     playerThread.stop();
                 }
             }
+            
+            // No more first move
+            firstMove = false;
             
             // Switch players
             this.currentPlayer = (this.currentPlayer + 1) % 2;
