@@ -50,7 +50,7 @@ public class GomokuReferee {
      * If referee accepts move, then move can be made and it is put on history
      * stack.
      * 
-     * @param player Current player
+     * @param player Current player index
      * @param position Proposed position
      * @return TRUE if moved is accepted, FALSE otherwise.
      * @throws IllegalMoveException Player tries to make illegal move (outside allowed rectangle or on not empty field).
