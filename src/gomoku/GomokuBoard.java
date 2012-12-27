@@ -52,7 +52,7 @@ public class GomokuBoard {
         this.sweep(GomokuBoardState.EMPTY);
     }
     
-    /**
+    /** tool
      * Sets all fields on board to given state.
      * 
      * @param state State of board
