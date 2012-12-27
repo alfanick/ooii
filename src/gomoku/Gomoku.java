@@ -1,6 +1,8 @@
 package gomoku;
 
+import gomoku.player.TestPlayer;
 import gomoku.ui.*;
+import java.awt.Rectangle;
 
 /**
  * Main game class. Creates the threads,
@@ -34,19 +36,28 @@ public class Gomoku {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Gomoku.ui = new GomokuUI();
-        Gomoku.uiThread = new Thread(Gomoku.ui);
+        //Gomoku.ui = new GomokuUI();
+        //Gomoku.uiThread = new Thread(Gomoku.ui);
         
         // This should be done by UI when game starts
-        //Gomoku.game = new Game();
-        //Gomoku.gameThread = new Thread(Gomoku.game);
+        GameRules rules = new GameRules(new Rectangle(6,6), new Rectangle(6,6), 4);
+        
+        Gomoku.game = new Game(new TestPlayer(), 0.05f, new TestPlayer(), 0.05f, rules);
+        Gomoku.gameThread = new Thread(Gomoku.game);
         // ---
         
+<<<<<<< HEAD
         Gomoku.uiThread.start();
 
         Gomoku.gameThread.start();
 
 
+=======
+        //Gomoku.uiThread.start();
+        Gomoku.gameThread.start();
+
+        
+>>>>>>> master
         System.out.println("Hello, World!");
     }
 }

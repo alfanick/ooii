@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Gomoku board (intersections) representation.
@@ -39,6 +40,7 @@ public class GomokuBoard {
         this.board = new GomokuBoardState[size.width][size.height];
         
         this.clean();
+
     }
     
     /**
@@ -50,7 +52,30 @@ public class GomokuBoard {
         this.sweep(GomokuBoardState.EMPTY);
     }
     
+<<<<<<< HEAD
     /** tool
+=======
+    /**
+     * Cleans the board, with FORBIDDEN state margin.
+     * Creates the board with FORBIDDEN state on every field
+     * except for allowed rectangle (where state is EMPTY).
+     * 
+     * @param allowed Rectangle of allowence
+     * @see GomokuBoardState#FORBIDDEN
+     * @see GomokuBoardState#EMPTY
+     */
+    public final void cleanWithForbidden(Rectangle allowed) {
+        this.sweep(GomokuBoardState.FORBIDDEN);
+        
+        for (int x = 0; x < allowed.width; x++) {
+            for (int y = 0; y < allowed.height; y++) {
+                this.board[x+allowed.x][y+allowed.y] = GomokuBoardState.EMPTY;
+            }
+        }
+    }
+    
+    /**
+>>>>>>> master
      * Sets all fields on board to given state.
      * 
      * @param state State of board
@@ -120,6 +145,27 @@ public class GomokuBoard {
     }
     
     /**
+     * Puts given state on random position within allowed rectangle
+     * 
+     * @param state State
+     * @param allowed Allowed rectangle
+     * @return Position
+     */
+    public Point setRandom(GomokuBoardState state, Rectangle allowed) {
+        Point position = new Point();
+        Random random = new Random();
+        
+        do {
+            position.x = random.nextInt(allowed.width);
+            position.y = random.nextInt(allowed.height);
+        } while (this.get(position) != GomokuBoardState.EMPTY);
+        
+        this.set(position, state);
+        
+        return position;
+    }
+    
+    /**
      * Get state on given position on board.
      * 
      * @param where Position
@@ -163,5 +209,25 @@ public class GomokuBoard {
         }
         
         return true;
+    }
+    
+    /**
+     * Prints boards for debugging
+     * 
+     * @param t Header to print
+     */
+    public void print(String t) {
+        System.out.println(t);
+        for (int x = 0; x < this.size.width; x++) {
+            for (int y = 0; y < this.size.height; y++) {
+                if (this.board[x][y].ordinal() < 2) {
+                    System.out.printf("%d", this.board[x][y].ordinal());
+                }
+                else {
+                    System.out.print('_');
+                }
+            }
+            System.out.println();
+        }
     }
 }
