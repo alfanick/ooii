@@ -207,6 +207,11 @@ public class GomokuBoard {
         return true;
     }
     
+    /**
+     * Prints boards for debugging
+     * 
+     * @param t Header to print
+     */
     public void print(String t) {
         System.out.println(t);
         for (int x = 0; x < this.size.width; x++) {
