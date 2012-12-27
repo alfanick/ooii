@@ -32,7 +32,7 @@ public class GomokuReferee {
      */
     public GomokuReferee(GameRules rules) {
         
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
     
     /**
