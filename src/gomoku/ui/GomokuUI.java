@@ -3,6 +3,8 @@ package gomoku.ui;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 //import java.awt.*;
 
 /**
@@ -122,6 +124,7 @@ public class GomokuUI extends JFrame implements Runnable  {
         
         JButton startButton = new JButton("Start");
         startButton.setBounds(80, 600, 140, 50);
+        startButton.addActionListener(new startButtonListener());
         
         JButton stopButton = new JButton("Stop");
         stopButton.setBounds(80, 680, 140, 50);
@@ -149,6 +152,19 @@ public class GomokuUI extends JFrame implements Runnable  {
               
         show();
     }
+    
+    /**
+     * Listener class.
+     */
+    class startButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent evnt) {
+            JOptionPane.showMessageDialog(new JPanel(),"Penis ja pierdziele \n chuj mi w cycki alalalalaltwset4neoridynhioeryoirdnhioergre", "Start game", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+    
+  //  class startPopUp 
+    
     
     /**
      * Thread

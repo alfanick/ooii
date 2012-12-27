@@ -2,7 +2,6 @@ package gomoku.ui;
 
 import gomoku.GameRules;
 import gomoku.GomokuBoard;
-import gomoku.GomokuBoardState;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -64,7 +63,9 @@ public class GomokuUIBoard extends JComponent {
     int hIntersectionsNumber;
     
     /**
-     * 
+     * Intersection measure method.
+     * Used by paint method.
+     * It checks vertival and horizontal intersections numbers and establishes left and top margin.
      */
     private void getIntersections() {
         GameRules rules = new GameRules(new Rectangle(0, 0, 19, 19), new Rectangle(3, 3, 5, 5), 5);
