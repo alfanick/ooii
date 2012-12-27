@@ -138,13 +138,12 @@ public class Game implements Runnable {
                         }
 
                         // Put a pawn
-                        this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
+                        this.board.set(move, GomokuBoardState.values()[this.currentPlayer]);
 
                         // Let UI draw new pawn
                         // Gomoku.ui.gomokuUIBoard.refresh();
                     }
                 } catch (IllegalMoveException ex) {
-                    Random random = new Random();
 
                     // See above
                     if (firstMove) {
@@ -152,14 +151,9 @@ public class Game implements Runnable {
                     }
 
                     // Illegal move is made - random move should be done
-                    // Pawn should be put on random EMPTY field
-                    while (this.board.get(move) != GomokuBoardState.EMPTY) {
-                        move.x = random.nextInt(this.referee.rules.getSizeRectangle().width);
-                        move.y = random.nextInt(this.referee.rules.getSizeRectangle().height);
-                    }
-
-                    // Put pawn
-                    this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
+                    // Put pawn randomly in allowed rectangle
+                    this.board.setRandom(GomokuBoardState.values()[this.currentPlayer], 
+                            firstMove ? this.referee.rules.getFirstMoveRectangle() : this.referee.rules.getSizeRectangle());
                 } finally {
                     System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
 
