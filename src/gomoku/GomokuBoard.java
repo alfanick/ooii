@@ -206,4 +206,19 @@ public class GomokuBoard {
         
         return true;
     }
+    
+    public void print(String t) {
+        System.out.println(t);
+        for (int x = 0; x < this.size.width; x++) {
+            for (int y = 0; y < this.size.height; y++) {
+                if (this.board[x][y].ordinal() < 2) {
+                    System.out.printf("%d", this.board[x][y].ordinal());
+                }
+                else {
+                    System.out.print('_');
+                }
+            }
+            System.out.println();
+        }
+    }
 }

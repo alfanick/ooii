@@ -63,7 +63,7 @@ public class GomokuReferee {
             IllegalMoveException,
             CorruptedBoardException,
             GameEndedException {
-        
+        //previousBoard.print("PRZED RUCHEM (S)");
         //checking if boards are equal
         try{
             areBoardsEqual();                   
@@ -85,6 +85,9 @@ public class GomokuReferee {
                 //state of a field depends on which of players takes turn
                 previousBoard.set(position, GomokuBoardState.values()[player]);
                 
+                history.add(position);
+                
+                //previousBoard.print("PO RUCHU (S)");
                 //checking if one of players won
                 if(puttedMInRow(position, rules.getInRowToWin(), player)){
                     throw new GameEndedException(position);

@@ -128,6 +128,8 @@ public class Game implements Runnable {
                 // Players move
                 Point move = this.players[this.currentPlayer].didMoveNow();
 
+                //this.board.print("PRZED RUCHEM");
+                
                 try {
                     // Player can move
                     if (this.referee.canMove(this.currentPlayer, move)) {
@@ -143,11 +145,12 @@ public class Game implements Runnable {
                         this.board.set(move, GomokuBoardState.values()[this.currentPlayer]);
 
                         System.out.println("Poprawny ruch");
+                        
                         // Let UI draw new pawn
                         // Gomoku.ui.gomokuUIBoard.refresh();
                     }
                 } catch (IllegalMoveException ex) {
-                    System.out.println("Zły ruch, losuje");
+                    System.out.println("Zły ruch, trace kolejke");
 
                     // Illegal move is made - random move should be done
                     // Put pawn randomly in allowed rectangle
@@ -155,12 +158,15 @@ public class Game implements Runnable {
                     //this.board.setRandom(GomokuBoardState.values()[this.currentPlayer], 
                     //        firstMove ? this.referee.rules.getFirstMoveRectangle() : this.referee.rules.getSizeRectangle());
                 } finally {
-                    System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
+                    System.out.printf("Move (%d, %d)\n", move.x, move.y);
 
                     // Lets kill thread if someone try to lock the system
                     if (playerThread.isAlive()) {
                         playerThread.stop();
                     }
+                    
+                    
+                        this.board.print("PO RUCHU");
 
                     // No more first move
                     firstMove = false;
