@@ -13,6 +13,7 @@ import java.util.Random;
 public final class TestPlayer implements PlayerInterface {
     private Point position;
     private GameRules rules;
+    private GomokuBoard board;
     
     public TestPlayer() {
         System.out.println("Created player");
@@ -43,8 +44,10 @@ public final class TestPlayer implements PlayerInterface {
         
         while (!Thread.interrupted()) {
             //System.out.print('.');
-            this.position.x = rnd.nextInt(this.rules.getSizeRectangle().width);
-            this.position.y = rnd.nextInt(this.rules.getSizeRectangle().height);
+            do {
+                this.position.x = rnd.nextInt(this.rules.getSizeRectangle().width);
+                this.position.y = rnd.nextInt(this.rules.getSizeRectangle().height);
+            } while (board.get(this.position) != GomokuBoardState.EMPTY);
         }
     }
 
@@ -52,6 +55,7 @@ public final class TestPlayer implements PlayerInterface {
     public void withBoardAndRules(GomokuBoard board, GameRules rules) {
         System.out.println("Got board and rules");
         this.rules = rules;
+        this.board = board;
     }
     
 }

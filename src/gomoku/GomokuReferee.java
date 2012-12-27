@@ -72,7 +72,7 @@ public class GomokuReferee {
         }
         
         // checking if move is not outside the board
-        if((position.x > 0) && (position.x < rules.getSizeRectangle().width) && (position.y > 0) && (position.y < rules.getSizeRectangle().height)){
+        if((position.x >= 0) && (position.x < rules.getSizeRectangle().width) && (position.y >= 0) && (position.y < rules.getSizeRectangle().height)){
             
             //checking if field is empty
             if(Gomoku.game.board.get(position) == GomokuBoardState.EMPTY){
@@ -85,7 +85,7 @@ public class GomokuReferee {
                 //state of a field depends on which of players takes turn
                 previousBoard.set(position, GomokuBoardState.values()[player]);
                 
-                history.add(position);
+                history.push(position);
                 
                 //previousBoard.print("PO RUCHU (S)");
                 //checking if one of players won
