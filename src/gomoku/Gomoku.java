@@ -38,12 +38,12 @@ public class Gomoku {
         Gomoku.uiThread = new Thread(Gomoku.ui);
         
         // This should be done by UI when game starts
-        Gomoku.game = new Game();
-        Gomoku.gameThread = new Thread(Gomoku.game);
+        //Gomoku.game = new Game();
+        //Gomoku.gameThread = new Thread(Gomoku.game);
         // ---
         
         Gomoku.uiThread.start();
-        Gomoku.gameThread.start();
+        //Gomoku.gameThread.start();
         
         System.out.println("Hello, World!");
     }
