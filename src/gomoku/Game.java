@@ -163,13 +163,13 @@ public class Game implements Runnable {
                     if (playerThread.isAlive()) {
                         playerThread.stop();
                     }
+
+                    // No more first move
+                    firstMove = false;
+
+                    // Switch players
+                    this.currentPlayer = (this.currentPlayer + 1) % 2;
                 }
-
-                // No more first move
-                firstMove = false;
-
-                // Switch players
-                this.currentPlayer = (this.currentPlayer + 1) % 2;
             }
         } catch (CorruptedBoardException ex) {
             // Current player corrupted board - that shoudn't happen

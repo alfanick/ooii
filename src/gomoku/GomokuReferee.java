@@ -34,6 +34,7 @@ public class GomokuReferee {
         this.rules = new GameRules(rules.getSizeRectangle(), rules.getFirstMoveRectangle(), rules.getInRowToWin());
         this.previousBoard = new GomokuBoard(rules.getSizeRectangle());
         this.previousBoard.cleanWithForbidden(rules.getFirstMoveRectangle());
+
     }
     
     /**
