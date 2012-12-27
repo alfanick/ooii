@@ -1,7 +1,6 @@
 package gomoku;
 
 import gomoku.exceptions.*;
-import gomoku.player.PlayerInterface;
 import java.awt.Point;
 import java.util.Stack;
 
@@ -64,14 +63,32 @@ public class GomokuReferee {
             CorruptedBoardException,
             GameEndedException {
         
-        if(!previousBoard.equals(Gomoku.game.board)){
-            throw new CorruptedBoardException(position);            
+        //checking if boards are equal
+        try{
+            areBoardsEqual();                   
+        }catch(CorruptedBoardException e){
+            throw e;
         }
         
+        // checking if move is not outside the board
         if((position.x > 0) && (position.x < rules.getSizeRectangle().x) && (position.y > 0) && (position.y < rules.getSizeRectangle().y)){
-            if(Gomoku.game.board.get(position)==GomokuBoardState.EMPTY){
-                previousBoard = Gomoku.game.board;
+            
+            //checking if field is empty
+            if(Gomoku.game.board.get(position) == GomokuBoardState.EMPTY){
                 
+                //checking if it is first move
+                if(history.empty()){
+                    previousBoard.clean();
+                }
+                
+                //state of a field depends on which of players takes turn
+                if(player == 0){
+                    previousBoard.set(position, GomokuBoardState.A );
+                }else{
+                    previousBoard.set(position, GomokuBoardState.B);
+                }
+                
+                //checking if one of players won
                 if(puttedMInRow(position, rules.getInRowToWin(), player)){
                     throw new GameEndedException(position);
                 }
@@ -96,7 +113,43 @@ public class GomokuReferee {
      * @param n Number of moves to revert.
      */
     public void moveBack(int n) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int i;
+        Point p;
+        
+        for(i=0; i<n; i++){
+            if(!history.empty()){
+                p=history.pop();
+                
+                previousBoard.set(p, GomokuBoardState.EMPTY);
+                Gomoku.game.board.set(p, GomokuBoardState.EMPTY);
+            
+            }else{
+                previousBoard.cleanWithForbidden(rules.getFirstMoveRectangle());
+                Gomoku.game.board.cleanWithForbidden(rules.getFirstMoveRectangle());
+                break;
+            }                
+        }
+    }
+    
+    /**
+     * Checks if board remembered in GomokuReferee is equal to global board
+     * 
+     * @return true if it is
+     * @throws CorruptedBoardException if it isn't
+     */
+    private boolean areBoardsEqual() throws CorruptedBoardException{
+        int i,j;
+        
+        for(i=0; i<rules.getSizeRectangle().x; i++){
+            for(j=0; j<rules.getSizeRectangle().y; j++){
+                Point p = new Point(i,j);
+                if(previousBoard.get(p).ordinal() != Gomoku.game.board.get(p).ordinal()){
+                    throw new CorruptedBoardException(p);
+                }
+            }
+        }
+        
+        return true;
     }
     
     /**
