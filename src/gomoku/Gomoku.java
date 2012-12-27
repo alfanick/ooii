@@ -48,6 +48,7 @@ public class Gomoku {
         
         //Gomoku.uiThread.start();
         Gomoku.gameThread.start();
+
         
         System.out.println("Hello, World!");
     }
