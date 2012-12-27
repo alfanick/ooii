@@ -100,6 +100,10 @@ public class GomokuUI extends JFrame implements Runnable  {
         panel.setLayout(null);
         getContentPane().add(panel);
         
+        JLabel gomokuHeader = new JLabel("GOMOKU", JLabel.CENTER);
+        gomokuHeader.setFont(new Font("Verdana", Font.BOLD, 32));
+        gomokuHeader.setBounds(50, 100, 200, 100);
+        
         JLabel player1 = new JLabel("Player 1", JLabel.CENTER);
         player1.setFont(new Font("Verdana", Font.BOLD, 18));
         player1.setBounds(80, 300, 140, 50);
@@ -132,6 +136,7 @@ public class GomokuUI extends JFrame implements Runnable  {
         GomokuUIBoard gomokuUIBoard = new GomokuUIBoard();
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
+        panel.add(gomokuHeader);
         panel.add(player1);
         panel.add(player2);
         panel.add(combobox1);
