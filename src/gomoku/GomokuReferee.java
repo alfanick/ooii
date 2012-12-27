@@ -32,7 +32,7 @@ public class GomokuReferee {
      */
     public GomokuReferee(GameRules rules) {
         
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.rules = new GameRules(rules.getSizeRectangle(), rules.getFirstMoveRectangle(), rules.getInRowToWin());
     }
     
     /**
@@ -57,12 +57,24 @@ public class GomokuReferee {
      * @throws CorruptedBoardException Player did alter the board, game is finished.
      * @throws GameEndedException Player made M-in-a-row! Game is finished.
      */
-    public boolean canMove(PlayerInterface player, Point position) throws
+    public boolean canMove(int player, Point position) throws
             IllegalMoveException,
             CorruptedBoardException,
             GameEndedException {
         
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(!previousBoard.equals(Gomoku.game.board)){
+            throw new CorruptedBoardException(position);            
+        }
+        
+        if((position.x > 0) && (position.x < rules.getSizeRectangle().x) && (position.y > 0) && (position.y < rules.getSizeRectangle().y)){
+            if(Gomoku.game.board.get(position)==GomokuBoardState.EMPTY){
+                previousBoard = Gomoku.game.board;
+                
+                                /*wywolac sprawdzanie wygranej*/
+                return true;
+            }
+        }
+        throw new IllegalMoveException(position);
     }
     
     /**
@@ -81,5 +93,11 @@ public class GomokuReferee {
      */
     public void moveBack(int n) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    private boolean puttedInRow(Point position, int inRow, int player){
+               
+        
+        return false;
     }
 }

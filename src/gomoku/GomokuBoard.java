@@ -40,7 +40,7 @@ public class GomokuBoard {
         this.clean();
         
         
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
     
     /**
