@@ -95,8 +95,24 @@ public class GomokuReferee {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    private boolean puttedInRow(Point position, int inRow, int player){
+    /**
+     * Checks if there is M powns in a row
+     * 
+     * @param position last move
+     * @param inRow     number of powns in a row to win
+     * @param player    player that did last move
+     * @return          true if there is M powns in a row, false otherwise
+     */
+    private boolean puttedMInRow(Point position, int inRow, int player){
                
+        int[][] count = new int[3][3]; 
+        int i;
+        
+        for(i=1; i<=inRow; i++){
+            if(Gomoku.game.board.get(new Point(position.x,position.y-i)). == player){
+                
+            }
+        }
         
         return false;
     }
