@@ -33,6 +33,8 @@ public class GomokuReferee {
     public GomokuReferee(GameRules rules) {
         
         this.rules = new GameRules(rules.getSizeRectangle(), rules.getFirstMoveRectangle(), rules.getInRowToWin());
+        this.previousBoard = new GomokuBoard(rules.getSizeRectangle());
+        this.previousBoard.cleanWithForbidden(rules.getFirstMoveRectangle());
     }
     
     /**
@@ -70,7 +72,9 @@ public class GomokuReferee {
             if(Gomoku.game.board.get(position)==GomokuBoardState.EMPTY){
                 previousBoard = Gomoku.game.board;
                 
-                                /*wywolac sprawdzanie wygranej*/
+                if(puttedMInRow(position, rules.getInRowToWin(), player)){
+                    throw new GameEndedException(position);
+                }
                 return true;
             }
         }
@@ -105,13 +109,95 @@ public class GomokuReferee {
      */
     private boolean puttedMInRow(Point position, int inRow, int player){
                
-        int[][] count = new int[3][3]; 
+        int[][] count = {{0,0,0},{0,0,0},{0,0,0}}; 
         int i;
         
         for(i=1; i<=inRow; i++){
-            if(Gomoku.game.board.get(new Point(position.x,position.y-i)). == player){
-                
-            }
+            if(position.y-i>=0){
+                if(Gomoku.game.board.get(new Point(position.x,position.y-i)).ordinal() == player){
+                    count[0][1]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        for(i=1; i<=inRow; i++){
+            if(position.y+i < rules.getSizeRectangle().y){
+                if(Gomoku.game.board.get(new Point(position.x,position.y+i)).ordinal() == player){
+                    count[2][1]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        for(i=1; i<=inRow; i++){
+            if(position.x-i >= 0){
+                if(Gomoku.game.board.get(new Point(position.x-i,position.y)).ordinal() == player){
+                    count[1][0]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        for(i=1; i<=inRow; i++){
+            if(position.x+i < rules.getSizeRectangle().x){
+                if(Gomoku.game.board.get(new Point(position.x+i,position.y)).ordinal() == player){
+                    count[1][0]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        for(i=1; i<=inRow; i++){
+            if((position.y-i >= 0) && (position.x-i >= 0)){
+                if(Gomoku.game.board.get(new Point(position.x-i,position.y-i)).ordinal() == player){
+                    count[0][0]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        for(i=1; i<=inRow; i++){
+            if((position.y+i < rules.getSizeRectangle().y) && (position.x+i < rules.getSizeRectangle().x)){
+                if(Gomoku.game.board.get(new Point(position.x+i,position.y+i)).ordinal() == player){
+                    count[2][2]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        for(i=1; i<=inRow; i++){
+            if((position.y-i >= 0) && (position.x+i < rules.getSizeRectangle().x)){
+                if(Gomoku.game.board.get(new Point(position.x+i,position.y-i)).ordinal() == player){
+                    count[0][2]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        for(i=1; i<=inRow; i++){
+            if((position.y+i < rules.getSizeRectangle().y) && (position.x-i >= 0)){
+                if(Gomoku.game.board.get(new Point(position.x-i,position.y+i)).ordinal() == player){
+                    count[2][0]++;
+                }else{
+                    break;
+                }
+            }else{break;}
+        }
+        
+        if((count[0][0] + count[2][2] + 1 >= inRow) ||
+           (count[0][1] + count[2][1] + 1 >= inRow) ||
+           (count[0][2] + count[2][0] + 1 >= inRow) ||
+           (count[1][0] + count[1][2] + 1 >= inRow)){
+            
+            return true; 
         }
         
         return false;
