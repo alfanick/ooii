@@ -5,6 +5,7 @@ import gomoku.exceptions.GameEndedException;
 import gomoku.exceptions.IllegalMoveException;
 import gomoku.player.PlayerInterface;
 import java.awt.Point;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -106,7 +107,7 @@ public class Game implements Runnable {
                 Thread.sleep(Math.round(this.playersTime[this.currentPlayer] * 1000));
                 System.out.println("Time out!");
             } catch (InterruptedException ex) {
-                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                // This shouldn't happen
             } finally {
                 // Time has passed
                 this.players[this.currentPlayer].shouldMoveNow();
@@ -115,14 +116,50 @@ public class Game implements Runnable {
                 playerThread.interrupt();
             }
             
-            // GomokuReferee should check result
+            // Players move
             Point move = this.players[this.currentPlayer].didMoveNow();
             
-            System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
+            try {
+                // Player can move
+                if (this.referee.canMove(this.currentPlayer, move)) {
+                    this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
+                    // Let UI draw new pawn
+                    // Gomoku.ui.gomokuUIBoard.refresh();
+                }
+            } catch (IllegalMoveException ex) {
+                Random random = new Random();
+                
+                // Illegal move is made - random move should be done
+                // Pawn should be put on random EMPTY field
+                while (this.board.get(move) != GomokuBoardState.EMPTY) {
+                    move.x = random.nextInt(this.referee.rules.getSizeRectangle().width);
+                    move.y = random.nextInt(this.referee.rules.getSizeRectangle().height);
+                }
+                
+                // Put pawn
+                this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
+            } catch (CorruptedBoardException ex) {
+                // Current player corrupted board - that shoudn't happen
+                // UI shows some dialog and finishes game
+                // Gomoku.ui.showCorruptedBoard(this.currentPlayer, ex);
+                
+                // Game is finished
+                break;
+            } catch (GameEndedException ex) {
+                // Player won the game!
+                // UI shows some dialog and finished game
+                // Gomoku.ui.showGameEnded(this.currentPlayer, ex);
+                
+                // Game is finished
+                break;
+            } finally {
+                System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
             
-            // Lets kill thread if someone try to lock the system
-            if (playerThread.isAlive())
-                playerThread.stop();
+                // Lets kill thread if someone try to lock the system
+                if (playerThread.isAlive()) {
+                    playerThread.stop();
+                }
+            }
             
             // Switch players
             this.currentPlayer = (this.currentPlayer + 1) % 2;
