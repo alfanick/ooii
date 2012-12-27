@@ -93,99 +93,102 @@ public class Game implements Runnable {
         // It is a first move
         boolean firstMove = true;
         
-        // Game loop
-        while (true) {
-            // Create thread
-            playerThread = new Thread(this.players[this.currentPlayer]);
-            
-            // Give player board to analyse and rules
-            this.players[this.currentPlayer].withBoardAndRules(this.board, this.referee.rules);
-            
-            // Let player think for some time
-            this.players[this.currentPlayer].willMoveFor(this.playersTime[currentPlayer]);
-            
-            // Let player to board
-            playerThread.start();
-            
-            try {
-                // Let player thinks for given time 
-                Thread.sleep(Math.round(this.playersTime[this.currentPlayer] * 1000));
-                System.out.println("Time out!");
-            } catch (InterruptedException ex) {
-                // This shouldn't happen
-            } finally {
-                // Time has passed
-                this.players[this.currentPlayer].shouldMoveNow();
-                
-                // Stop thinking!
-                playerThread.interrupt();
-            }
-            
-            // Players move
-            Point move = this.players[this.currentPlayer].didMoveNow();
-            
-            try {
-                // Player can move
-                if (this.referee.canMove(this.currentPlayer, move)) {
-                    // The move is correct and its first move, so
-                    // there might be some FORBIDDEN fields. We don't want
-                    // them after first move - so set board to EMPTY and
-                    // then put a pawn
+        // Try to play as long as possible
+        try {
+            // Game loop
+            while (true) {
+                // Create thread
+                playerThread = new Thread(this.players[this.currentPlayer]);
+
+                // Give player board to analyse and rules
+                this.players[this.currentPlayer].withBoardAndRules(this.board, this.referee.rules);
+
+                // Let player think for some time
+                this.players[this.currentPlayer].willMoveFor(this.playersTime[currentPlayer]);
+
+                // Let player to board
+                playerThread.start();
+
+                try {
+                    // Let player thinks for given time 
+                    Thread.sleep(Math.round(this.playersTime[this.currentPlayer] * 1000));
+                    System.out.println("Time out!");
+                } catch (InterruptedException ex) {
+                    // This shouldn't happen
+                } finally {
+                    // Time has passed
+                    this.players[this.currentPlayer].shouldMoveNow();
+
+                    // Stop thinking!
+                    playerThread.interrupt();
+                }
+
+                // Players move
+                Point move = this.players[this.currentPlayer].didMoveNow();
+
+                try {
+                    // Player can move
+                    if (this.referee.canMove(this.currentPlayer, move)) {
+                        // The move is correct and its first move, so
+                        // there might be some FORBIDDEN fields. We don't want
+                        // them after first move - so set board to EMPTY and
+                        // then put a pawn
+                        if (firstMove) {
+                            this.board.clean();
+                        }
+
+                        // Put a pawn
+                        this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
+
+                        // Let UI draw new pawn
+                        // Gomoku.ui.gomokuUIBoard.refresh();
+                    }
+                } catch (IllegalMoveException ex) {
+                    Random random = new Random();
+
+                    // See above
                     if (firstMove) {
                         this.board.clean();
                     }
-                    
-                    // Put a pawn
+
+                    // Illegal move is made - random move should be done
+                    // Pawn should be put on random EMPTY field
+                    while (this.board.get(move) != GomokuBoardState.EMPTY) {
+                        move.x = random.nextInt(this.referee.rules.getSizeRectangle().width);
+                        move.y = random.nextInt(this.referee.rules.getSizeRectangle().height);
+                    }
+
+                    // Put pawn
                     this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
-                    
-                    // Let UI draw new pawn
-                    // Gomoku.ui.gomokuUIBoard.refresh();
+                } finally {
+                    System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
+
+                    // Lets kill thread if someone try to lock the system
+                    if (playerThread.isAlive()) {
+                        playerThread.stop();
+                    }
                 }
-            } catch (IllegalMoveException ex) {
-                Random random = new Random();
-                
-                // See above
-                if (firstMove) {
-                    this.board.clean();
-                }
-                
-                // Illegal move is made - random move should be done
-                // Pawn should be put on random EMPTY field
-                while (this.board.get(move) != GomokuBoardState.EMPTY) {
-                    move.x = random.nextInt(this.referee.rules.getSizeRectangle().width);
-                    move.y = random.nextInt(this.referee.rules.getSizeRectangle().height);
-                }
-                
-                // Put pawn
-                this.board.set(move, this.currentPlayer == 0 ? GomokuBoardState.A : GomokuBoardState.B);
-            } catch (CorruptedBoardException ex) {
-                // Current player corrupted board - that shoudn't happen
-                // UI shows some dialog and finishes game
-                // Gomoku.ui.showCorruptedBoard(this.currentPlayer, ex);
-                
-                // Game is finished
-                break;
-            } catch (GameEndedException ex) {
-                // Player won the game!
-                // UI shows some dialog and finished game
-                // Gomoku.ui.showGameEnded(this.currentPlayer, ex);
-                
-                // Game is finished
-                break;
-            } finally {
-                System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
-            
-                // Lets kill thread if someone try to lock the system
-                if (playerThread.isAlive()) {
-                    playerThread.stop();
-                }
+
+                // No more first move
+                firstMove = false;
+
+                // Switch players
+                this.currentPlayer = (this.currentPlayer + 1) % 2;
             }
+        } catch (CorruptedBoardException ex) {
+            // Current player corrupted board - that shoudn't happen
+            // UI shows some dialog and finishes game
+            // Gomoku.ui.showCorruptedBoard(this.currentPlayer, ex);
+
+            // Game is finished
             
-            // No more first move
-            firstMove = false;
-            
-            // Switch players
-            this.currentPlayer = (this.currentPlayer + 1) % 2;
+        } catch (GameEndedException ex) {
+            // Player won the game!
+            // UI shows some dialog and finished game
+            // Gomoku.ui.showGameEnded(this.currentPlayer, ex);
+
+            // Game is finished
+
         }
     }
 }
