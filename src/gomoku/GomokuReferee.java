@@ -58,17 +58,24 @@ public class GomokuReferee {
      * @throws IllegalMoveException Player tries to make illegal move (outside allowed rectangle or on not empty field).
      * @throws CorruptedBoardException Player did alter the board, game is finished.
      * @throws GameEndedException Player made M-in-a-row! Game is finished.
+     * @throws DrawGameEndedException when there is no empty fields on board
      */
     public boolean canMove(int player, Point position) throws
             IllegalMoveException,
             CorruptedBoardException,
-            GameEndedException {
+            GameEndedException,
+            DrawGameEndedException{
         //previousBoard.print("PRZED RUCHEM (S)");
         //checking if boards are equal
         try{
             areBoardsEqual();                   
         }catch(CorruptedBoardException e){
             throw e;
+        }
+        
+        //checking if there is any empty field
+        if(!Gomoku.game.board.any(GomokuBoardState.EMPTY)){
+            throw new DrawGameEndedException(position);
         }
         
         // checking if move is not outside the board
