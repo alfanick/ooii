@@ -31,7 +31,7 @@ public class GomokuReferee {
      * @param rules Rules to obey
      */
     public GomokuReferee(GameRules rules) {
-        
+        this.rules = rules;
         //throw new UnsupportedOperationException("Not supported yet.");
     }
     

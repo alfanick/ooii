@@ -172,7 +172,8 @@ public class Game implements Runnable {
                 
                 // Game is finished
                 break;
-            } finally {
+            } catch (UnsupportedOperationException ex) { } 
+            finally {
                 System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
             
                 // Lets kill thread if someone try to lock the system

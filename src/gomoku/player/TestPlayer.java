@@ -2,6 +2,7 @@ package gomoku.player;
 
 import gomoku.*;
 import java.awt.Point;
+import java.util.Random;
 
 /**
  * Implementation of human player. It interacts with GUI.
@@ -12,8 +13,6 @@ import java.awt.Point;
 public final class TestPlayer implements PlayerInterface {
     private Point position;
     private GameRules rules;
-    
-    private boolean stopFlag = false;
     
     public TestPlayer() {
         System.out.println("Created player");
@@ -29,8 +28,6 @@ public final class TestPlayer implements PlayerInterface {
     @Override
     public void shouldMoveNow() {
         System.out.println("I should move now!");
-        
-        this.stopFlag = true;
     }
 
     @Override
@@ -42,10 +39,12 @@ public final class TestPlayer implements PlayerInterface {
 
     @Override
     public void run() {
-        while (!this.stopFlag) {
+        Random rnd = new Random();
+        
+        while (!Thread.interrupted()) {
             //System.out.print('.');
-            this.position.x = (this.position.x+1) % 19;
-            this.position.y = (this.position.y+1) % 19;
+            this.position.x = rnd.nextInt(this.rules.getSizeRectangle().width);
+            this.position.y = rnd.nextInt(this.rules.getSizeRectangle().height);
         }
     }
 
