@@ -2,6 +2,7 @@ package gomoku;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,9 +39,6 @@ public class GomokuBoard {
         this.board = new GomokuBoardState[size.width][size.height];
         
         this.clean();
-        
-        
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     /**
@@ -71,7 +69,7 @@ public class GomokuBoard {
      * @return Positions of empty fields.
      */
     public List<Point> emptyFields() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.with(GomokuBoardState.EMPTY);
     }
     
     /**
@@ -80,7 +78,10 @@ public class GomokuBoard {
      * @return Positions of occupied fields. 
      */
     public List<Point> occupiedFields() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Point> result = this.with(GomokuBoardState.A);
+        result.addAll(this.with(GomokuBoardState.B));
+        
+        return result;
     }
     
     /**
@@ -90,7 +91,17 @@ public class GomokuBoard {
      * @return Positions of given state.
      */
     public List<Point> with(GomokuBoardState state) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Point> result = new ArrayList<>();
+        
+        for (int x = 0; x < this.size.width; x++) {
+            for (int y = 0; y < this.size.height; y++) {
+                if (this.board[x][y] == state) {
+                    result.add(new Point(x, y));
+                }
+            }
+        }
+        
+        return result;
     }
     
     /**
@@ -101,7 +112,11 @@ public class GomokuBoard {
      * @return Previous state on this field.
      */
     public GomokuBoardState set(Point where, GomokuBoardState state) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GomokuBoardState previous = this.get(where);
+        
+        this.board[where.x][where.y] = state;
+        
+        return previous;
     }
     
     /**
@@ -111,7 +126,7 @@ public class GomokuBoard {
      * @return State on this field.
      */
     public GomokuBoardState get(Point where) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.board[where.x][where.y];
     }
     
     /**
@@ -121,7 +136,15 @@ public class GomokuBoard {
      * @return TRUE if there is at least one field with given state, FALSE otherwise.
      */
     public boolean any(GomokuBoardState state) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (int x = 0; x < this.size.width; x++) {
+            for (int y = 0; y < this.size.height; y++) {
+                if (this.board[x][y] == state) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
     
     /**
@@ -131,6 +154,14 @@ public class GomokuBoard {
      * @return TRUE if all fields are given state, FALSE otherwise.
      */
     public boolean all(GomokuBoardState state) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (int x = 0; x < this.size.width; x++) {
+            for (int y = 0; y < this.size.height; y++) {
+                if (this.board[x][y] != state) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 }

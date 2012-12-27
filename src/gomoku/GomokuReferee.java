@@ -50,14 +50,14 @@ public class GomokuReferee {
      * If referee accepts move, then move can be made and it is put on history
      * stack.
      * 
-     * @param player Current player
+     * @param player Current player index
      * @param position Proposed position
      * @return TRUE if moved is accepted, FALSE otherwise.
      * @throws IllegalMoveException Player tries to make illegal move (outside allowed rectangle or on not empty field).
      * @throws CorruptedBoardException Player did alter the board, game is finished.
      * @throws GameEndedException Player made M-in-a-row! Game is finished.
      */
-    public boolean canMove(PlayerInterface player, Point position) throws
+    public boolean canMove(int player, Point position) throws
             IllegalMoveException,
             CorruptedBoardException,
             GameEndedException {
