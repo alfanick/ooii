@@ -52,9 +52,8 @@ public class GomokuBoard {
         this.sweep(GomokuBoardState.EMPTY);
     }
     
-<<<<<<< HEAD
-    /** tool
-=======
+
+
     /**
      * Cleans the board, with FORBIDDEN state margin.
      * Creates the board with FORBIDDEN state on every field
@@ -75,7 +74,6 @@ public class GomokuBoard {
     }
     
     /**
->>>>>>> master
      * Sets all fields on board to given state.
      * 
      * @param state State of board
