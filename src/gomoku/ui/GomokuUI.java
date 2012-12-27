@@ -140,12 +140,8 @@ public class GomokuUI extends JFrame implements Runnable  {
         progressbar.setBounds(80, 570 , 140, 30);
         
         JButton startButton = new JButton("Start");
-<<<<<<< HEAD
-        startButton.setBounds(80, 600, 140, 50);
-        startButton.addActionListener(new startButtonListener());
-=======
         startButton.setBounds(80, 620, 140, 50);
->>>>>>> b3cde620554458d0a5868175fea1c3b838f3d4c5
+        startButton.addActionListener(new startButtonListener());
         
         JButton stopButton = new JButton("Stop");
         stopButton.setBounds(80, 690, 140, 50);
@@ -183,11 +179,33 @@ public class GomokuUI extends JFrame implements Runnable  {
     class startButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evnt) {
-            JOptionPane.showMessageDialog(new JPanel(),"Penis ja pierdziele \n chuj mi w cycki alalalalaltwset4neoridynhioeryoirdnhioergre", "Start game", JOptionPane.PLAIN_MESSAGE);
-        }
-    }
+            JTextField field1 = new JTextField();  
+            JTextField field2 = new JTextField();  
+            JTextField field3 = new JTextField();  
+            JTextField field4 = new JTextField();  
+            JTextField field5 = new JTextField();  
+            Object[] message = {
+                "RULES",
+                "Board width:", field1,  
+                "Board height:", field2,  
+                "M-in-row:", field3,  
+                "Time for white player:", field4,  
+                "Time for nigger:", field5,  
+            };  
+            //class startPopUp 
+            int option = JOptionPane.showConfirmDialog(new JPanel(), message, "Star Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
+            
+            if (option == JOptionPane.OK_OPTION) {
+                String boardWidth = field1.getText();  
+                String boardHeight = field2.getText();  
+                String mInRow = field3.getText();  
+                String timeWhite = field4.getText();  
+                String timeBlack = field5.getText();  
+            }
+         }
+     }
+      
     
-  //  class startPopUp 
     
     
     /**
