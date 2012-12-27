@@ -2,6 +2,7 @@ package gomoku.ui;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 //import java.awt.*;
 
@@ -42,6 +43,9 @@ public class GomokuUI extends JFrame implements Runnable  {
      */
     private JComboBox combobox1;
     private JComboBox combobox2;
+    
+    
+    private JProgressBar progressbar;
     
     /**
      * Start button
@@ -100,17 +104,27 @@ public class GomokuUI extends JFrame implements Runnable  {
         panel.setLayout(null);
         getContentPane().add(panel);
         
+        JPanel player1Panel = new JPanel();
+        JPanel player2Panel = new JPanel();
+        
         JLabel gomokuHeader = new JLabel("GOMOKU", JLabel.CENTER);
         gomokuHeader.setFont(new Font("Verdana", Font.BOLD, 32));
         gomokuHeader.setBounds(50, 100, 200, 100);
         
         JLabel player1 = new JLabel("Player 1", JLabel.CENTER);
         player1.setFont(new Font("Verdana", Font.BOLD, 18));
+        player1.setForeground(Color.white);
+        player1Panel.setBackground(Color.black);
+        player1Panel.add(player1);
         player1.setBounds(80, 300, 140, 50);
+        player1Panel.setBounds(80, 300, 140, 50);
         
         JLabel player2 = new JLabel("Player 2", JLabel.CENTER);
         player2.setFont(new Font("Verdana", Font.BOLD, 18));
+        player2Panel.setBackground(Color.white);
+        player2Panel.add(player2);
         player2.setBounds(80, 380, 140, 50);
+        player2Panel.setBounds(80, 380, 140, 50);
         
         combobox1 = new JComboBox(players);
         combobox1.setSelectedIndex(-1);
@@ -120,27 +134,33 @@ public class GomokuUI extends JFrame implements Runnable  {
         combobox2.setSelectedIndex(-1);
         combobox2.setBounds(80, 430 , 140, 30);
         
+        JProgressBar progressbar = new JProgressBar();
+        progressbar.setBounds(80, 570 , 140, 30);
+        
         JButton startButton = new JButton("Start");
-        startButton.setBounds(80, 600, 140, 50);
+        startButton.setBounds(80, 620, 140, 50);
         
         JButton stopButton = new JButton("Stop");
-        stopButton.setBounds(80, 680, 140, 50);
+        stopButton.setBounds(80, 690, 140, 50);
         
         JButton pauseButton = new JButton("Pause");
         pauseButton.setBounds(80, 760, 140, 50);
         
         JLabel timeLabel = new JLabel("Time", JLabel.CENTER);
         timeLabel.setFont(new Font("Verdana", Font.BOLD, 24));
-        timeLabel.setBounds(80, 540, 140, 50);
+        timeLabel.setBounds(80, 520, 140, 50);
         
         GomokuUIBoard gomokuUIBoard = new GomokuUIBoard();
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
         panel.add(player1);
+        panel.add(player1Panel);
         panel.add(player2);
+        panel.add(player2Panel);
         panel.add(combobox1);
         panel.add(combobox2);
+        panel.add(progressbar);
         panel.add(startButton);
         panel.add(stopButton);
         panel.add(pauseButton);
