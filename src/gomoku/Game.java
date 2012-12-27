@@ -191,7 +191,7 @@ public class Game implements Runnable {
             // Game is finished
             System.out.printf("Koniec gry (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
 
-                        this.board.set(ex.getPosition(), GomokuBoardState.values()[this.currentPlayer]);
+                        this.board.set(ex.getPosition(), GomokuBoardState.values()[(this.currentPlayer+1)%2]);
                         this.board.print("KONIEC");
         }
     }
