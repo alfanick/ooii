@@ -97,6 +97,8 @@ public class Game implements Runnable {
         try {
             // Game loop
             while (true) {
+                System.out.printf("\n\nJestem %d\n", this.currentPlayer);
+                
                 // Create thread
                 playerThread = new Thread(this.players[this.currentPlayer]);
 
@@ -147,15 +149,11 @@ public class Game implements Runnable {
                 } catch (IllegalMoveException ex) {
                     System.out.println("Zły ruch, losuje");
 
-                    // See above
-                    if (firstMove) {
-                        this.board.clean();
-                    }
-
                     // Illegal move is made - random move should be done
                     // Put pawn randomly in allowed rectangle
-                    this.board.setRandom(GomokuBoardState.values()[this.currentPlayer], 
-                            firstMove ? this.referee.rules.getFirstMoveRectangle() : this.referee.rules.getSizeRectangle());
+                    //if (this.referee.canMove(this.currentPlayer))
+                    //this.board.setRandom(GomokuBoardState.values()[this.currentPlayer], 
+                    //        firstMove ? this.referee.rules.getFirstMoveRectangle() : this.referee.rules.getSizeRectangle());
                 } finally {
                     System.out.printf("I moved to (%d, %d)\n", move.x, move.y);
 
@@ -177,7 +175,7 @@ public class Game implements Runnable {
             // Gomoku.ui.showCorruptedBoard(this.currentPlayer, ex);
 
             // Game is finished
-            System.out.println("Uszkodzona plansza, koniec");
+            System.out.printf("Uszkodzona plansza, koniec (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
             
         } catch (GameEndedException ex) {
             // Player won the game!

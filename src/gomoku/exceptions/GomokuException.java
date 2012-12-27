@@ -20,7 +20,6 @@ public class GomokuException extends Exception {
      */
     public GomokuException(Point position) {
         this.position = position;   
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     /**

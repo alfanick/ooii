@@ -30,7 +30,7 @@ public class GomokuReferee {
      * @param rules Rules to obey
      */
     public GomokuReferee(GameRules rules) {
-        
+        this.history = new Stack<>();
         this.rules = new GameRules(rules.getSizeRectangle(), rules.getFirstMoveRectangle(), rules.getInRowToWin());
         this.previousBoard = new GomokuBoard(rules.getSizeRectangle());
         this.previousBoard.cleanWithForbidden(rules.getFirstMoveRectangle());
@@ -40,7 +40,7 @@ public class GomokuReferee {
     /**
      * Previous board, that referee rembembers, in case player would swap it.
      */
-    public GomokuBoard previousBoard;
+    private GomokuBoard previousBoard;
     
     /**
      * Checks if move by given player is acceptable. If move makes M-in-a-row,
@@ -72,7 +72,7 @@ public class GomokuReferee {
         }
         
         // checking if move is not outside the board
-        if((position.x > 0) && (position.x < rules.getSizeRectangle().x) && (position.y > 0) && (position.y < rules.getSizeRectangle().y)){
+        if((position.x > 0) && (position.x < rules.getSizeRectangle().width) && (position.y > 0) && (position.y < rules.getSizeRectangle().height)){
             
             //checking if field is empty
             if(Gomoku.game.board.get(position) == GomokuBoardState.EMPTY){
@@ -135,11 +135,10 @@ public class GomokuReferee {
      * @throws CorruptedBoardException if it isn't
      */
     private boolean areBoardsEqual() throws CorruptedBoardException{
-        int i,j;
+        Point p = new Point();
         
-        for(i=0; i<rules.getSizeRectangle().x; i++){
-            for(j=0; j<rules.getSizeRectangle().y; j++){
-                Point p = new Point(i,j);
+        for(p.x = 0; p.x<rules.getSizeRectangle().width; p.x++){
+            for(p.y = 0; p.y<rules.getSizeRectangle().height; p.y++){
                 if(previousBoard.get(p) != Gomoku.game.board.get(p)){
                     throw new CorruptedBoardException(p);
                 }
@@ -173,7 +172,7 @@ public class GomokuReferee {
         }
         
         for(i=1; i<=inRow; i++){
-            if(position.y+i < rules.getSizeRectangle().y){
+            if(position.y+i < rules.getSizeRectangle().height){
                 if(Gomoku.game.board.get(new Point(position.x,position.y+i)).ordinal() == player){
                     count[2][1]++;
                 }else{
@@ -193,7 +192,7 @@ public class GomokuReferee {
         }
         
         for(i=1; i<=inRow; i++){
-            if(position.x+i < rules.getSizeRectangle().x){
+            if(position.x+i < rules.getSizeRectangle().width){
                 if(Gomoku.game.board.get(new Point(position.x+i,position.y)).ordinal() == player){
                     count[1][0]++;
                 }else{
@@ -213,7 +212,7 @@ public class GomokuReferee {
         }
         
         for(i=1; i<=inRow; i++){
-            if((position.y+i < rules.getSizeRectangle().y) && (position.x+i < rules.getSizeRectangle().x)){
+            if((position.y+i < rules.getSizeRectangle().height) && (position.x+i < rules.getSizeRectangle().width)){
                 if(Gomoku.game.board.get(new Point(position.x+i,position.y+i)).ordinal() == player){
                     count[2][2]++;
                 }else{
@@ -223,7 +222,7 @@ public class GomokuReferee {
         }
         
         for(i=1; i<=inRow; i++){
-            if((position.y-i >= 0) && (position.x+i < rules.getSizeRectangle().x)){
+            if((position.y-i >= 0) && (position.x+i < rules.getSizeRectangle().width)){
                 if(Gomoku.game.board.get(new Point(position.x+i,position.y-i)).ordinal() == player){
                     count[0][2]++;
                 }else{
@@ -233,7 +232,7 @@ public class GomokuReferee {
         }
         
         for(i=1; i<=inRow; i++){
-            if((position.y+i < rules.getSizeRectangle().y) && (position.x-i >= 0)){
+            if((position.y+i < rules.getSizeRectangle().height) && (position.x-i >= 0)){
                 if(Gomoku.game.board.get(new Point(position.x-i,position.y+i)).ordinal() == player){
                     count[2][0]++;
                 }else{

@@ -145,8 +145,9 @@ public class GomokuBoard {
      * 
      * @param state State
      * @param allowed Allowed rectangle
+     * @return Position
      */
-    public void setRandom(GomokuBoardState state, Rectangle allowed) {
+    public Point setRandom(GomokuBoardState state, Rectangle allowed) {
         Point position = new Point();
         Random random = new Random();
         
@@ -156,6 +157,8 @@ public class GomokuBoard {
         } while (this.get(position) != GomokuBoardState.EMPTY);
         
         this.set(position, state);
+        
+        return position;
     }
     
     /**
