@@ -37,8 +37,10 @@ public class Gomoku {
         Gomoku.ui = new GomokuUI();
         Gomoku.uiThread = new Thread(Gomoku.ui);
         
+        // This should be done by UI when game starts
         Gomoku.game = new Game();
         Gomoku.gameThread = new Thread(Gomoku.game);
+        // ---
         
         Gomoku.uiThread.start();
         Gomoku.gameThread.start();

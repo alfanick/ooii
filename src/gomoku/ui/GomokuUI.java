@@ -10,13 +10,9 @@ import java.awt.*;
  * exceptions.
  * 
  * @author Amadeusz Juskowiak
+ * @see http://www.eng.auburn.edu/~rayh/java/java/AWT.Introduction.html
  */
-public class GomokuUI implements Runnable  {
-    /**
-     * AWT Window
-     */
-    private Window window;
-    
+public class GomokuUI extends Frame implements Runnable  {
     /**
      * Start button
      */
