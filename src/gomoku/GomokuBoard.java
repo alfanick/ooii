@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Gomoku board (intersections) representation.
@@ -137,6 +138,24 @@ public class GomokuBoard {
         this.board[where.x][where.y] = state;
         
         return previous;
+    }
+    
+    /**
+     * Puts given state on random position within allowed rectangle
+     * 
+     * @param state State
+     * @param allowed Allowed rectangle
+     */
+    public void setRandom(GomokuBoardState state, Rectangle allowed) {
+        Point position = new Point();
+        Random random = new Random();
+        
+        do {
+            position.x = random.nextInt(allowed.width);
+            position.y = random.nextInt(allowed.height);
+        } while (this.get(position) != GomokuBoardState.EMPTY);
+        
+        this.set(position, state);
     }
     
     /**
