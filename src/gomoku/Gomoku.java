@@ -42,7 +42,7 @@ public class Gomoku {
         // This should be done by UI when game starts
         GameRules rules = new GameRules(new Rectangle(6,6), new Rectangle(6,6), 4);
         
-        Gomoku.game = new Game(new TestPlayer(), 1.0f, new TestPlayer(), 2.0f, rules);
+        Gomoku.game = new Game(new TestPlayer(), 0.5f, new TestPlayer(), 0.5f, rules);
         Gomoku.gameThread = new Thread(Gomoku.game);
         // ---
         
