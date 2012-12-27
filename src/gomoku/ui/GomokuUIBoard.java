@@ -67,7 +67,7 @@ public class GomokuUIBoard extends JComponent {
      * 
      */
     private void getIntersections() {
-        GameRules rules = new GameRules(new Rectangle(0, 0, 10, 10), new Rectangle(3, 3, 5, 5), 5);
+        GameRules rules = new GameRules(new Rectangle(0, 0, 15, 19), new Rectangle(3, 3, 5, 5), 5);
         Rectangle board;
         board = rules.getSizeRectangle();
         vIntersectionsNumber = board.height;
@@ -96,11 +96,11 @@ public class GomokuUIBoard extends JComponent {
         
         for (int i = 1; i <= vIntersectionsNumber; i++) {
             g.drawString(numbers[i - 1], leftMargin - 25, topMargin + 5 + i * INTERSPACE);
-            g2d.drawLine(leftMargin, topMargin + i * INTERSPACE, leftMargin + (vIntersectionsNumber + 1) * INTERSPACE, topMargin + i * INTERSPACE);
+            g2d.drawLine(leftMargin, topMargin + i * INTERSPACE, leftMargin + (hIntersectionsNumber + 1) * INTERSPACE, topMargin + i * INTERSPACE);
         }
         for (int i = 1; i <= hIntersectionsNumber; i++) {
             g.drawString(letters[i - 1], leftMargin - 5 + i * INTERSPACE, topMargin - 15);
-            g2d.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (hIntersectionsNumber + 1) * INTERSPACE);
+            g2d.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
         }
         g.setColor(Color.white);
         for (int i = 0; i < hIntersectionsNumber; i ++) {
