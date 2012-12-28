@@ -230,10 +230,10 @@ public class GomokuUI extends JFrame implements Runnable  {
                 
         
         
-      //  GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
+        GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
         
         gomokuUIBoard = new GomokuUIBoard();
-    //    gomokuUIBoard.createIntersections(rules.getSizeRectangle());
+        gomokuUIBoard.createIntersections(rules.getSizeRectangle());
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
@@ -304,10 +304,10 @@ public class GomokuUI extends JFrame implements Runnable  {
             JTextField field3 = new JTextField("5");  
             JTextField field4 = new JTextField("0.1");  
             JTextField field5 = new JTextField("0.1");            
-            JTextField field6 = new JTextField("0");  
-            JTextField field7 = new JTextField("0");
-            JTextField field8 = new JTextField("19");  
-            JTextField field9 = new JTextField("19");  
+            JTextField field6 = new JTextField("7");  
+            JTextField field7 = new JTextField("7");
+            JTextField field8 = new JTextField("5");  
+            JTextField field9 = new JTextField("5");  
 
             Object[] message = {
                 "RULES",
@@ -360,12 +360,13 @@ public class GomokuUI extends JFrame implements Runnable  {
                 progressbar.setValue(0);
                 
                 GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
-                                                new Rectangle(boardHeight, boardWidth), mInRow);
+                                                new Rectangle(firstMoveX, firstMoveY, firstMoveBoardHeight, firstMoveBoardWidth), mInRow);
                 
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
                 stopTicking();
                 Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
-            //    gomokuUIBoard.repaint();
+                refresh();
+                //    gomokuUIBoard.repaint();
                 
                 Gomoku.gameThread = new Thread(Gomoku.game);
         
