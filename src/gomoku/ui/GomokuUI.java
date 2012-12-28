@@ -62,6 +62,11 @@ public class GomokuUI extends JFrame implements Runnable  {
     /**
      * Start button
      */
+    private JList list;
+    
+    /**
+     * Start button
+     */
     private JButton startButton;
     
     /**
@@ -72,12 +77,17 @@ public class GomokuUI extends JFrame implements Runnable  {
     /**
      * Pause button
      */
-    private JButton pauseButton;
+    //private JButton pauseButton;
     
     /**
      * Time of given player.
      */
     private JLabel timeLabel;
+    
+    /**
+     * Time of given player.
+     */
+    private JLabel historyLabel;
     
     /**  setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
      * Board
@@ -106,10 +116,28 @@ public class GomokuUI extends JFrame implements Runnable  {
         setResizable(false);
         
         String[] players = {
-	"Human",
-        "Bot 1", "Bot 2", 
-	"Bot 3", "Bot 4",
-        "Bot 5", "Bot 6"
+            "Human",
+            "Bot 1", "Bot 2", 
+            "Bot 3", "Bot 4",
+            "Bot 5", "Bot 6"
+        };
+        
+        /**
+         * Zapis historii ruchow graczy/botow 
+         */
+        String[] history = {
+            "White A4", "Black B6",
+            "White F7", "Black C2",
+            "White F4", "Black E3",
+            "White A4", "Black B6",
+            "White F7", "Black C2",
+            "White F4", "Black E3",
+            "White A4", "Black B6",
+            "White F7", "Black C2",
+            "White F4", "Black E3",
+            "White A4", "Black B6",
+            "White F7", "Black C2",
+            "White F4", "Black E3"
         };
         
         Font smallFont = new Font("Verdana", Font.BOLD, 18);
@@ -152,21 +180,30 @@ public class GomokuUI extends JFrame implements Runnable  {
         combobox2.setBounds(LEFT_MARGIN, TOP_MARGIN + 330 , 140, 30);
         
         progressbar = new JProgressBar();
-        progressbar.setBounds(LEFT_MARGIN, TOP_MARGIN + 470 , 140, 30);
+        progressbar.setBounds(LEFT_MARGIN, TOP_MARGIN + 470 , 90, 30);
+        
+        list = new JList(history);
+        JScrollPane pane = new JScrollPane();
+        pane.getViewport().add(list);
+        pane.setBounds(LEFT_MARGIN + 120, TOP_MARGIN + 470, 100, 150);
         
         startButton = new JButton("Start");
-        startButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 520, 140, 50);
+        startButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 520, 90, 40);
         startButton.addActionListener(new startButtonListener());
         
         stopButton = new JButton("Stop");
-        stopButton.setBounds(LEFT_MARGIN + 100, TOP_MARGIN + 590, 40, 50);
+        stopButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 580, 90, 40);
         
-        pauseButton = new JButton("Pause");
-        pauseButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 590, 100, 50);
+        //pauseButton = new JButton("Pause");
+        //pauseButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 590, 100, 50);
         
         timeLabel = new JLabel("Time", JLabel.CENTER);
         timeLabel.setFont(mediumFont);
-        timeLabel.setBounds(LEFT_MARGIN, TOP_MARGIN + 420, 140, 50);
+        timeLabel.setBounds(LEFT_MARGIN, TOP_MARGIN + 420, 90, 50);
+        
+        historyLabel = new JLabel("History", JLabel.CENTER);
+        historyLabel.setFont(mediumFont);
+        historyLabel.setBounds(LEFT_MARGIN + 120, TOP_MARGIN + 420, 100, 50);
         
         
                 
@@ -184,10 +221,12 @@ public class GomokuUI extends JFrame implements Runnable  {
         panel.add(player2);
         panel.add(player2Panel);
         panel.add(progressbar);
+        panel.add(pane);
         panel.add(startButton);
         panel.add(stopButton);
-        panel.add(pauseButton);
+        //panel.add(pauseButton);
         panel.add(timeLabel);
+        panel.add(historyLabel);
         panel.add(gomokuUIBoard);
               
         //setVisible(true);
@@ -251,7 +290,7 @@ public class GomokuUI extends JFrame implements Runnable  {
                 "Time for white player:", field4,  
                 "Time for nigger:", field5,  
             };  
-            //class startPopUp 
+            
             do {
                 excep = false;
                 int option = JOptionPane.showConfirmDialog(new JPanel(), message, "Star Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
