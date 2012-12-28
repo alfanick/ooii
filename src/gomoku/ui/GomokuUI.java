@@ -278,7 +278,8 @@ public class GomokuUI extends JFrame implements Runnable  {
     class stopButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evnt) {
-            JOptionPane.showMessageDialog(new JPanel(),"Stop");
+            startButton.setText("Start");
+            Gomoku.game.stopFlag = true;
         }
     }
     

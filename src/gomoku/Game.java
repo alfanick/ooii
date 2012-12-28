@@ -80,6 +80,11 @@ public class Game implements Runnable {
     }
     
     /**
+     * Used for stopping game
+     */
+    public boolean stopFlag = false;
+    
+    /**
      * Creates Game thread - ask players for move, maintain their times,
      * asks referee for acceptance, makes the move and alters players.
      */
@@ -97,7 +102,7 @@ public class Game implements Runnable {
         // Try to play as long as possible
         try {
             // Game loop
-            while (true) {
+            while (!stopFlag) {
                 //System.out.printf("\n\nJestem %d\n", this.currentPlayer);
                 
                 // Create thread
@@ -170,7 +175,6 @@ public class Game implements Runnable {
                     if (playerThread.isAlive()) {
                         playerThread.stop();
                     }
-                    playerThread = null;
                     
                     
                     //this.board.print("PO RUCHU");
@@ -210,5 +214,7 @@ public class Game implements Runnable {
                 Gomoku.ui.showWinnerMessage(ex.getPosition());
             }
         }
+        
+        stopFlag = false;
     }
 }
