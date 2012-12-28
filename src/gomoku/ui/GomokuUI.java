@@ -267,6 +267,9 @@ public class GomokuUI extends JFrame implements Runnable  {
                         if  (boardWidth > 19 || boardHeight > 19 || boardWidth < 3 || boardHeight < 3) {
                             excep = true;
                             JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.PLAIN_MESSAGE);
+                       } else if (mInRow > Math.min(boardHeight, boardWidth)) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "M-in-row must be less or equal to shorter side", "Wrong M-in-row length!", JOptionPane.PLAIN_MESSAGE);    
                        }
                     }   catch (NumberFormatException exception) {
                             excep = true;
