@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
+
 //import java.awt.*;
 
 /**
@@ -314,6 +315,7 @@ public class GomokuUI extends JFrame implements Runnable  {
             
         }
     }
+
     
     /**
      * Listener class.

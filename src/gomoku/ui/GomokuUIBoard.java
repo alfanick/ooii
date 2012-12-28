@@ -7,10 +7,11 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 /**
  * Component representing Gomoku board.
@@ -60,15 +61,22 @@ public class GomokuUIBoard extends JComponent {
      */
     int vIntersectionsNumber;
     
-    /**
+     /**
      * Horizontal intersections number
      */
     int hIntersectionsNumber;
+    
+    int mousePositionX;
+    int mousePositionY;
+    
+  
     
     Font smallFont;
     
     public GomokuUIBoard() {
         smallFont = new Font("Georgia", Font.BOLD, FONTSIZE);
+        addMouseMotionListener(new MyMouseMotionListener());
+        addMouseListener(new pieceAreaListener());
       //  createIntersections(new Rectangle(3,3));
     }
     
@@ -79,6 +87,7 @@ public class GomokuUIBoard extends JComponent {
      * 
      * @param board Size rectangle
      */
+    
     public final void createIntersections(Rectangle board) {
         //GameRules rules = new GameRules(new Rectangle(0, 0, 5, 5), new Rectangle(3, 3, 5, 5), 5);
         vIntersectionsNumber = board.width;
@@ -109,6 +118,13 @@ public class GomokuUIBoard extends JComponent {
             g.drawString(letters[i - 1], leftMargin - 5 + i * INTERSPACE, topMargin - 15);
             g.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
         }
+        
+        if(mousePositionX != -1 && mousePositionY != -1) {
+            g.setColor(Color.pink);
+            g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionY + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionX+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+        }  else {
+            
+        }
 
         try{
             Point p = new Point();
@@ -135,28 +151,7 @@ public class GomokuUIBoard extends JComponent {
         }
     }
     
-    public class pieceArea extends JLabel {
-        int x, y;
-        final int startXInPixel = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
-        final int startYInPixel = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
-      // final int width = CIRCLESIZE;
-        //final int height = CIRCLESIZE;
-      /*  final int leftPx = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
-        final int rightPx = (leftMargin + CIRCLESIZE/2) + (y + 1)*INTERSPACE ;
-        final int topPx = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
-        final int bottomPx =(topMargin + CIRCLESIZE/2) + (x + 1)*INTERSPACE;
-*/
-        public pieceArea(int x, int y) {
-            setOpaque(true);
-            setBounds(startXInPixel, startYInPixel, CIRCLESIZE, CIRCLESIZE);
-            addMouseListener(new pieceAreaListener());
-            setVisible(false);
-        }
-    }
-    
-    
-            
-        public class pieceAreaListener implements MouseListener {
+     public class pieceAreaListener implements MouseListener {
         //where initialization occurs:
         //Register for mouse events on blankArea and the panel.
 
@@ -179,9 +174,68 @@ public class GomokuUIBoard extends JComponent {
         public void mouseReleased(MouseEvent e) {
             
         }
+     }
+     
+     class MyMouseMotionListener implements MouseMotionListener  {
+          public void mouseDragged(MouseEvent e) {
+            showMousePos(e);
+          }
 
-        
+          public void mouseMoved(MouseEvent e) {
+            showMousePos(e);
+          }
+
+          private void showMousePos(MouseEvent e) {
+      //      JLabel src = (JLabel)e.getComponent();
+            PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+            Point point = pointerInfo.getLocation();
+          //  src.setText(point.toString());
+            for (int i = 0; i < vIntersectionsNumber; i++) {
+                for (int j = 0; j < hIntersectionsNumber; j++) {
+                if (point.x >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
+                        point.x <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) && 
+                        point.y >= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
+                        point.y <= ((topMargin - CIRCLESIZE/2) + (j+ 1)*INTERSPACE + CIRCLESIZE)) {
+                    highlightPiece(point.x, point.y);
+                }   else {
+                    mousePositionX = -1;
+                    mousePositionY = -1;
+                }
+             }
+           }
+          }
+     }
+          
+          public void highlightPiece(int x, int y) {
+              mousePositionX = x;
+              mousePositionY = y;
+        //      Graphics2D g = new Graphics();
+//g.setColor(Color.pink);
+  //            g.fillOval((leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+          }
+          
+  /*  public class pieceArea extends JLabel {
+        int x, y;
+        final int startXInPixel = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
+        final int startYInPixel = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
+      // final int width = CIRCLESIZE;
+        //final int height = CIRCLESIZE;
+      /*  final int leftPx = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
+        final int rightPx = (leftMargin + CIRCLESIZE/2) + (y + 1)*INTERSPACE ;
+        final int topPx = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
+        final int bottomPx =(topMargin + CIRCLESIZE/2) + (x + 1)*INTERSPACE;
+*/
+    /*    public pieceArea(int x, int y) {
+            setOpaque(true);
+            setBounds(startXInPixel, startYInPixel, CIRCLESIZE, CIRCLESIZE);
+            addMouseListener(new pieceAreaListener());
+            setVisible(false);
+        }
     }
+    */
+    
+            
+       
         //throw new UnsupportedOperationException("Not supported yet.");
     
 }
