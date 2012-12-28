@@ -67,7 +67,7 @@ public class GomokuUIBoard extends JComponent {
     
     public GomokuUIBoard() {
         smallFont = new Font("Georgia", Font.BOLD, FONTSIZE);
-        createIntersections(new Rectangle(3,3));
+      //  createIntersections(new Rectangle(3,3));
     }
     
     /**
@@ -130,7 +130,68 @@ public class GomokuUIBoard extends JComponent {
         } catch (NullPointerException ex) {
             
         }
-        
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
+    /*
+    public class BlankArea extends JLabel {
+    int x, y;
+    final static int leftPx =;
+    final static int rightPx =;
+    final static int topPx = ;
+    final static int bottomPx =;
+
+    public BlankArea(Color color) {
+        setBackground(color);
+        setOpaque(true);
+        setBorder(BorderFactory.createLineBorder(Color.black));
+    }
+
+    public Dimension getMinimumSize() {
+        return minSize;
+    }
+
+    public Dimension getPreferredSize() {
+        return minSize;
+    }
+}
+    
+    
+            
+   /*     public class MouseEventDemo ... implements MouseListener {
+        //where initialization occurs:
+        //Register for mouse events on blankArea and the panel.
+        blankArea.addMouseListener(this);
+        addMouseListener(this);
+        
+
+    public void mousePressed(MouseEvent e) {
+       saySomething("Mouse pressed; # of clicks: "
+                    + e.getClickCount(), e);
+    }
+
+    public void mouseReleased(MouseEvent e) {
+       saySomething("Mouse released; # of clicks: "
+                    + e.getClickCount(), e);
+    }
+
+    public void mouseEntered(MouseEvent e) {
+       saySomething("Mouse entered", e);
+    }
+
+    public void mouseExited(MouseEvent e) {
+       saySomething("Mouse exited", e);
+    }
+
+    public void mouseClicked(MouseEvent e) {
+       saySomething("Mouse clicked (# of clicks: "
+                    + e.getClickCount() + ")", e);
+    }
+
+    void saySomething(String eventDescription, MouseEvent e) {
+        textArea.append(eventDescription + " detected on "
+                        + e.getComponent().getClass().getName()
+                        + "." + newline);
+    }
+}*/
+        //throw new UnsupportedOperationException("Not supported yet.");
+    
 }

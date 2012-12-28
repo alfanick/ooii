@@ -205,10 +205,10 @@ public class GomokuUI extends JFrame implements Runnable  {
                 
         
         
-        GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
+      //  GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
         
         gomokuUIBoard = new GomokuUIBoard();
-        gomokuUIBoard.createIntersections(rules.getSizeRectangle());
+    //    gomokuUIBoard.createIntersections(rules.getSizeRectangle());
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
@@ -335,7 +335,7 @@ public class GomokuUI extends JFrame implements Runnable  {
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
                 
                 Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
-                gomokuUIBoard.repaint();
+            //    gomokuUIBoard.repaint();
                 
                 Gomoku.gameThread = new Thread(Gomoku.game);
         
