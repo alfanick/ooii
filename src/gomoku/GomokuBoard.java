@@ -29,6 +29,13 @@ public class GomokuBoard {
      */
     private Rectangle size;
     
+    /**
+     * Position of last move
+     * 
+     * @see GomokuBoard#set(java.awt.Point, gomoku.GomokuBoardState) 
+     */
+    private Point lastMove;
+    
     
     /**
      * Constructor. Creates clean board by given size.
@@ -38,9 +45,19 @@ public class GomokuBoard {
     public GomokuBoard(Rectangle size) {
         this.size = size;
         this.board = new GomokuBoardState[size.width][size.height];
+        this.lastMove = new Point(-1,-1);
         
         this.clean();
 
+    }
+    
+    /**
+     * Returns last move made on board.
+     * 
+     * @return Last move
+     */
+    public Point lastMove() {
+        return lastMove;
     }
     
     /**
@@ -79,6 +96,8 @@ public class GomokuBoard {
      * @param state State of board
      */
     public final void sweep(GomokuBoardState state) {
+        this.lastMove = new Point(-1,-1);
+        
         for (int x = 0; x < this.size.width; x++) {
             for (int y = 0; y < this.size.height; y++) {
                 this.board[x][y] = state;
@@ -136,6 +155,8 @@ public class GomokuBoard {
      */
     public GomokuBoardState set(Point where, GomokuBoardState state) {
         GomokuBoardState previous = this.get(where);
+        
+        this.lastMove = (Point)where.clone();
         
         this.board[where.x][where.y] = state;
         
