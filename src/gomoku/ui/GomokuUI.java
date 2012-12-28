@@ -6,9 +6,12 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 //import java.awt.*;
@@ -89,6 +92,11 @@ public class GomokuUI extends JFrame implements Runnable  {
      */
     private JLabel historyLabel;
     
+    /**
+     * Model for history
+     */
+    public DefaultListModel historyModel;
+    
     /**  setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
      * Board
      */
@@ -98,6 +106,7 @@ public class GomokuUI extends JFrame implements Runnable  {
      * The constructor
      */
     public GomokuUI() {
+        historyModel = new DefaultListModel();
         initUI();
     }
     
@@ -126,18 +135,7 @@ public class GomokuUI extends JFrame implements Runnable  {
          * Zapis historii ruchow graczy/botow 
          */
         String[] history = {
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3",
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3",
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3",
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3"
+            "New game"
         };
         
         Font smallFont = new Font("Verdana", Font.BOLD, 18);
@@ -183,6 +181,31 @@ public class GomokuUI extends JFrame implements Runnable  {
         progressbar.setBounds(LEFT_MARGIN, TOP_MARGIN + 470 , 90, 30);
         
         list = new JList(history);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setModel(historyModel);
+        
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int index = list.locationToIndex(e.getPoint());
+                    
+                    Gomoku.game.referee.moveBack(index+1);
+                    
+                    repaint();
+                    
+                    System.out.println(historyModel.elementAt(index));
+                    
+                    if (index > 0) {
+                        historyModel.removeRange(0, index-1);
+                    } else {
+                        historyModel.removeElementAt(0);
+                    }
+                    list.clearSelection();
+                }
+            }
+        });
+        
         JScrollPane pane = new JScrollPane();
         pane.getViewport().add(list);
         pane.setBounds(LEFT_MARGIN + 120, TOP_MARGIN + 470, 100, 150);
@@ -205,9 +228,9 @@ public class GomokuUI extends JFrame implements Runnable  {
         historyLabel = new JLabel("History", JLabel.CENTER);
         historyLabel.setFont(mediumFont);
         historyLabel.setBounds(LEFT_MARGIN + 120, TOP_MARGIN + 420, 100, 50);
-        
-        
                 
+        
+        
         GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
         
         gomokuUIBoard = new GomokuUIBoard();
@@ -277,14 +300,18 @@ public class GomokuUI extends JFrame implements Runnable  {
      * Stops moving progress bar
      */
     public void stopTicking() {
-        progressTimer.cancel();
+        try {
+            progressTimer.cancel();
+        } catch (NullPointerException e) {
+            
+        }
     }
     
     /**
      * Listener class.
      */
     class startButtonListener implements ActionListener {
-        int boardWidth, boardHeight, mInRow;
+        int boardWidth, boardHeight, firstMoveX, firstMoveY, firstMoveBoardWidth, firstMoveBoardHeight, mInRow;
         float timeWhite, timeBlack;
         @Override
         public void actionPerformed(ActionEvent evnt) {
@@ -295,10 +322,10 @@ public class GomokuUI extends JFrame implements Runnable  {
             JTextField field3 = new JTextField("5");  
             JTextField field4 = new JTextField("0.1");  
             JTextField field5 = new JTextField("0.1");            
-            JTextField field6 = new JTextField("0");  
-            JTextField field7 = new JTextField("1");
+            JTextField field6 = new JTextField("7");  
+            JTextField field7 = new JTextField("7");
             JTextField field8 = new JTextField("5");  
-            JTextField field9 = new JTextField("0.1");  
+            JTextField field9 = new JTextField("5");  
 
             Object[] message = {
                 "RULES",
@@ -307,6 +334,10 @@ public class GomokuUI extends JFrame implements Runnable  {
                 "M-in-row:", field3,  
                 "Time for white player:", field4,  
                 "Time for nigger:", field5,  
+                "First move x:", field6,
+                "First move y:", field7,
+                "First move board width:", field8,
+                "First move board height:", field9
             };  
             
             do {
@@ -321,10 +352,17 @@ public class GomokuUI extends JFrame implements Runnable  {
                        mInRow = Integer.parseInt(field3.getText());  
                        timeWhite = Float.parseFloat(field4.getText());  
                        timeBlack = Float.parseFloat(field5.getText());  
+                       firstMoveX = Integer.parseInt(field6.getText()); 
+                       firstMoveY = Integer.parseInt(field7.getText()); 
+                       firstMoveBoardWidth = Integer.parseInt(field8.getText()); 
+                       firstMoveBoardHeight = Integer.parseInt(field9.getText()); 
                         if  (boardWidth > 19 || boardHeight > 19 || boardWidth < 3 || boardHeight < 3) {
                             excep = true;
                             JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.PLAIN_MESSAGE);
-                       } else if (mInRow > Math.min(boardHeight, boardWidth)) {
+                       }    else if (firstMoveBoardWidth > boardWidth || firstMoveBoardHeight > boardHeight) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Board's first move space cannot be bigger than board's size!", "Wrong first move board size!", JOptionPane.PLAIN_MESSAGE); 
+                       }    else if (mInRow > Math.min(boardHeight, boardWidth)) {
                             excep = true;
                             JOptionPane.showMessageDialog(new JPanel(), "M-in-row must be less or equal to shorter side", "Wrong M-in-row length!", JOptionPane.PLAIN_MESSAGE);    
                        }
@@ -335,19 +373,44 @@ public class GomokuUI extends JFrame implements Runnable  {
                    }
                } while (excep);
                 startButton.setText("Pause");          
+                historyModel.clear();
+                historyModel.addElement("Game started");
+                progressbar.setValue(0);
+                
                 GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
-                                                new Rectangle(boardHeight, boardWidth), mInRow);
+                                                new Rectangle(firstMoveX, firstMoveY, firstMoveBoardHeight, firstMoveBoardWidth), mInRow);
                 
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
-                
+                stopTicking();
                 Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
-                gomokuUIBoard.repaint();
+                refresh();
+                //    gomokuUIBoard.repaint();
                 
                 Gomoku.gameThread = new Thread(Gomoku.game);
         
                 Gomoku.gameThread.start();
          }
    }
+    
+    /**
+     * Updates UI and history
+     */
+    public void refresh() {
+        Point p = Gomoku.game.board.lastMove();
+        if (p.x != -1) {
+            StringBuilder s = new StringBuilder();
+            s.append(Gomoku.game.board.get(p) == GomokuBoardState.A ? "White" : "Black");
+            s.append(' ');
+            s.append(GomokuUIBoard.letters[p.y]);
+            s.append(GomokuUIBoard.numbers[p.x]);
+            
+            if (!((String) this.historyModel.getElementAt(0)).equals(s.toString())) {
+                this.historyModel.add(0, s.toString());
+            }
+        }
+       
+        repaint();
+    }
     
       
     
