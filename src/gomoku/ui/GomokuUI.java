@@ -416,6 +416,7 @@ public class GomokuUI extends JFrame implements Runnable  {
                     historyModel.clear();
                     historyModel.addElement("Game started");
                     progressbar.setValue(0);
+                    list.setEnabled(true);
 
                     GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
                                                     new Rectangle(firstMoveX, firstMoveY, firstMoveBoardHeight, firstMoveBoardWidth), mInRow);
