@@ -213,7 +213,7 @@ public class GomokuUI extends JFrame implements Runnable  {
             public void run() {
                 progressbar.setValue(Math.min(progressbar.getValue() + 1, 100));
             } 
-        }, 0l, Math.round(time*1000)/100l);
+        }, 0l, Math.round(time*10));
     }
     
     /**
@@ -279,7 +279,10 @@ public class GomokuUI extends JFrame implements Runnable  {
                                                 new Rectangle(boardHeight, boardWidth), mInRow);
                 
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
+                
                 Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
+                gomokuUIBoard.repaint();
+                
                 Gomoku.gameThread = new Thread(Gomoku.game);
         
                 Gomoku.gameThread.start();
