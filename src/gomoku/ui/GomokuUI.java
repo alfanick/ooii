@@ -328,6 +328,17 @@ public class GomokuUI extends JFrame implements Runnable  {
         float timeWhite, timeBlack;
         @Override
         public void actionPerformed(ActionEvent evnt) {
+            if (startButton.getText().equals("Pause")) {
+                Gomoku.game.pause();
+                startButton.setText("Continue");
+                
+                return;
+            } else if (startButton.getText().equals("Continue")) {
+                Gomoku.game.resume();
+                startButton.setText("Pause");
+                
+                return;
+            }
 
             boolean excep;
             JTextField field1 = new JTextField("19");  
