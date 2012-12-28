@@ -205,12 +205,17 @@ public class GomokuUI extends JFrame implements Runnable  {
                         int mInRow = Integer.parseInt(field3.getText());  
                         double timeWhite = Double.parseDouble(field4.getText());  
                         double timeBlack = Double.parseDouble(field5.getText());  
+                        if  (boardWidth > 19 || boardHeight > 19) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.PLAIN_MESSAGE);
+                       }
                     }   catch (NumberFormatException exception) {
                             excep = true;
-                            JOptionPane.showMessageDialog(new JPanel(), "Not all fields are right numbers!", "Wrong input!", JOptionPane.WARNING_MESSAGE);
-                         } 
+                            JOptionPane.showMessageDialog(new JPanel(), "Not all fields are right numbers!", "Wrong input!", JOptionPane.PLAIN_MESSAGE);
+                         }
                    }
-              } while (excep);
+               } while (excep);
+                startButton.setText("Pause");
          }
      }
       
