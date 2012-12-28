@@ -65,6 +65,8 @@ public class GomokuUIBoard extends JComponent {
     
     Font smallFont;
     
+    public boolean paused = false;
+    
     public GomokuUIBoard() {
         smallFont = new Font("Georgia", Font.BOLD, FONTSIZE);
       //  createIntersections(new Rectangle(3,3));
@@ -83,6 +85,7 @@ public class GomokuUIBoard extends JComponent {
         hIntersectionsNumber = board.height;
         leftMargin = 20 + (900 - ((hIntersectionsNumber + 2) * INTERSPACE)) / 2;
         topMargin = 20 + (900 - ((vIntersectionsNumber + 2) * INTERSPACE)) / 2;
+        paused = false;
     }
     
     /**
@@ -107,28 +110,33 @@ public class GomokuUIBoard extends JComponent {
             g.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
         }
 
-        try{
-            Point p = new Point();
-            for (p.x = 0; p.x < vIntersectionsNumber; p.x++) {
-                for (p.y = 0; p.y < hIntersectionsNumber; p.y++) {
-                    switch (Gomoku.game.board.get(p)) {
-                        case A:
-                            g.setColor(Color.white);
-                            break;
-                        case B:
-                            g.setColor(Color.black);
-                            break;
-                        case FORBIDDEN:
-                            g.setColor(Color.lightGray);
-                            break;
-                        default:
-                            continue;
+        if (!paused) {
+            try{
+                Point p = new Point();
+                for (p.x = 0; p.x < vIntersectionsNumber; p.x++) {
+                    for (p.y = 0; p.y < hIntersectionsNumber; p.y++) {
+                        switch (Gomoku.game.board.get(p)) {
+                            case A:
+                                g.setColor(Color.white);
+                                break;
+                            case B:
+                                g.setColor(Color.black);
+                                break;
+                            case FORBIDDEN:
+                                g.setColor(Color.lightGray);
+                                break;
+                            default:
+                                continue;
+                        }
+                        g.fillOval((leftMargin - CIRCLESIZE/2) + (p.y + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (p.x + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE); 
                     }
-                    g.fillOval((leftMargin - CIRCLESIZE/2) + (p.y + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (p.x + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE); 
                 }
+            } catch (NullPointerException ex) {
+
             }
-        } catch (NullPointerException ex) {
-            
+        } else {
+            g.setColor(Color.pink);
+            g.fillRect(0, 0, this.getSize().height, this.getSize().width);
         }
     }
     /*

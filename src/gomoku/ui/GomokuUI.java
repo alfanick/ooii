@@ -187,6 +187,11 @@ public class GomokuUI extends JFrame implements Runnable  {
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (!list.isEnabled()) {
+                    return;
+                }
+                
+                
                 if (e.getClickCount() == 2) {
                     int index = list.locationToIndex(e.getPoint());
                     
@@ -331,11 +336,17 @@ public class GomokuUI extends JFrame implements Runnable  {
             if (startButton.getText().equals("Pause")) {
                 Gomoku.game.pause();
                 startButton.setText("Continue");
+                list.setEnabled(false);
+                gomokuUIBoard.paused = true;
+                gomokuUIBoard.repaint();
                 
                 return;
             } else if (startButton.getText().equals("Continue")) {
                 Gomoku.game.resume();
                 startButton.setText("Pause");
+                list.setEnabled(true);
+                gomokuUIBoard.paused = false;
+                gomokuUIBoard.repaint();
                 
                 return;
             }
