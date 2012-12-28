@@ -10,6 +10,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 //import java.awt.*;
@@ -179,7 +181,30 @@ public class GomokuUI extends JFrame implements Runnable  {
         progressbar.setBounds(LEFT_MARGIN, TOP_MARGIN + 470 , 90, 30);
         
         list = new JList(history);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setModel(historyModel);
+        
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int index = list.locationToIndex(e.getPoint());
+                    
+                    Gomoku.game.referee.moveBack(index+1);
+                    
+                    repaint();
+                    
+                    System.out.println(historyModel.elementAt(index));
+                    
+                    if (index > 0) {
+                        historyModel.removeRange(0, index-1);
+                    } else {
+                        historyModel.removeElementAt(0);
+                    }
+                    list.clearSelection();
+                }
+            }
+        });
         
         JScrollPane pane = new JScrollPane();
         pane.getViewport().add(list);
@@ -257,7 +282,11 @@ public class GomokuUI extends JFrame implements Runnable  {
      * Stops moving progress bar
      */
     public void stopTicking() {
-        progressTimer.cancel();
+        try {
+            progressTimer.cancel();
+        } catch (NullPointerException e) {
+            
+        }
     }
     
     /**
@@ -317,12 +346,13 @@ public class GomokuUI extends JFrame implements Runnable  {
                 startButton.setText("Pause");          
                 historyModel.clear();
                 historyModel.addElement("Game started");
+                progressbar.setValue(0);
                 
                 GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
                                                 new Rectangle(boardHeight, boardWidth), mInRow);
                 
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
-                
+                stopTicking();
                 Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
                 gomokuUIBoard.repaint();
                 
@@ -332,8 +362,10 @@ public class GomokuUI extends JFrame implements Runnable  {
          }
    }
     
-    @Override
-    public void repaint() {
+    /**
+     * Updates UI and history
+     */
+    public void refresh() {
         Point p = Gomoku.game.board.lastMove();
         if (p.x != -1) {
             StringBuilder s = new StringBuilder();
@@ -344,7 +376,7 @@ public class GomokuUI extends JFrame implements Runnable  {
             this.historyModel.add(0, s);
         }
        
-        super.repaint();
+        repaint();
     }
     
       

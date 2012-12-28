@@ -164,7 +164,7 @@ public class Game implements Runnable {
                     //        firstMove ? this.referee.rules.getFirstMoveRectangle() : this.referee.rules.getSizeRectangle());
                 } finally {
                     //System.out.printf("Move (%d, %d)\n", move.x, move.y);
-                    Gomoku.ui.repaint();
+                    Gomoku.ui.refresh();
                 
                     // Lets kill thread if someone try to lock the system
                     if (playerThread.isAlive()) {
@@ -200,7 +200,7 @@ public class Game implements Runnable {
             //System.out.printf("Koniec gry (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
 
             this.board.set(ex.getPosition(), GomokuBoardState.values()[(this.currentPlayer+1)%2]);
-            Gomoku.ui.repaint();
+            Gomoku.ui.refresh();
                 
             //this.board.print("KONIEC");
             
