@@ -7,6 +7,8 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import java.awt.*;
 import javax.swing.*;
 
@@ -98,6 +100,7 @@ public class GomokuUIBoard extends JComponent {
         g.setFont(smallFont);
         g.setColor(Color.black);
         
+        
         for (int i = 1; i <= vIntersectionsNumber; i++) {
             g.drawString(numbers[i - 1], leftMargin - 25, topMargin + 5 + i * INTERSPACE);
             g.drawLine(leftMargin, topMargin + i * INTERSPACE, leftMargin + (hIntersectionsNumber + 1) * INTERSPACE, topMargin + i * INTERSPACE);
@@ -131,67 +134,54 @@ public class GomokuUIBoard extends JComponent {
             
         }
     }
-    /*
-    public class BlankArea extends JLabel {
-    int x, y;
-    final static int leftPx =;
-    final static int rightPx =;
-    final static int topPx = ;
-    final static int bottomPx =;
-
-    public BlankArea(Color color) {
-        setBackground(color);
-        setOpaque(true);
-        setBorder(BorderFactory.createLineBorder(Color.black));
+    
+    public class pieceArea extends JLabel {
+        int x, y;
+        final int startXInPixel = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
+        final int startYInPixel = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
+      // final int width = CIRCLESIZE;
+        //final int height = CIRCLESIZE;
+      /*  final int leftPx = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
+        final int rightPx = (leftMargin + CIRCLESIZE/2) + (y + 1)*INTERSPACE ;
+        final int topPx = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
+        final int bottomPx =(topMargin + CIRCLESIZE/2) + (x + 1)*INTERSPACE;
+*/
+        public pieceArea(int x, int y) {
+            setOpaque(true);
+            setBounds(startXInPixel, startYInPixel, CIRCLESIZE, CIRCLESIZE);
+            addMouseListener(new pieceAreaListener());
+            setVisible(false);
+        }
     }
-
-    public Dimension getMinimumSize() {
-        return minSize;
-    }
-
-    public Dimension getPreferredSize() {
-        return minSize;
-    }
-}
     
     
             
-   /*     public class MouseEventDemo ... implements MouseListener {
+        public class pieceAreaListener implements MouseListener {
         //where initialization occurs:
         //Register for mouse events on blankArea and the panel.
-        blankArea.addMouseListener(this);
-        addMouseListener(this);
+
+        public void mouseEntered(MouseEvent e) {
+            //("Mouse entered", e);
+        }
         
+        public void mouseExited(MouseEvent e) {
+            //saySomething("Mouse exited", e);
+        }
 
-    public void mousePressed(MouseEvent e) {
-       saySomething("Mouse pressed; # of clicks: "
-                    + e.getClickCount(), e);
-    }
+        public void mouseClicked(MouseEvent e) {
+            
+        }
+        
+        public void mousePressed(MouseEvent e) {
+            
+        }
+        
+        public void mouseReleased(MouseEvent e) {
+            
+        }
 
-    public void mouseReleased(MouseEvent e) {
-       saySomething("Mouse released; # of clicks: "
-                    + e.getClickCount(), e);
+        
     }
-
-    public void mouseEntered(MouseEvent e) {
-       saySomething("Mouse entered", e);
-    }
-
-    public void mouseExited(MouseEvent e) {
-       saySomething("Mouse exited", e);
-    }
-
-    public void mouseClicked(MouseEvent e) {
-       saySomething("Mouse clicked (# of clicks: "
-                    + e.getClickCount() + ")", e);
-    }
-
-    void saySomething(String eventDescription, MouseEvent e) {
-        textArea.append(eventDescription + " detected on "
-                        + e.getComponent().getClass().getName()
-                        + "." + newline);
-    }
-}*/
         //throw new UnsupportedOperationException("Not supported yet.");
     
 }

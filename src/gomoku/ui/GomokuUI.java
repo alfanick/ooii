@@ -380,7 +380,7 @@ public class GomokuUI extends JFrame implements Runnable  {
                          }
                    }
                } while (excep);
-                startButton.setText("Pause");          
+             //   startButton.setText("Pause");          
                 historyModel.clear();
                 historyModel.addElement("Game started");
                 progressbar.setValue(0);
