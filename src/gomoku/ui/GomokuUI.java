@@ -385,7 +385,10 @@ public class GomokuUI extends JFrame implements Runnable  {
             s.append(' ');
             s.append(GomokuUIBoard.letters[p.y]);
             s.append(GomokuUIBoard.numbers[p.x]);
-            this.historyModel.add(0, s);
+            
+            if (!((String) this.historyModel.getElementAt(0)).equals(s.toString())) {
+                this.historyModel.add(0, s.toString());
+            }
         }
        
         repaint();
