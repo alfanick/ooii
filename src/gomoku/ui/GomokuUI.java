@@ -1,5 +1,6 @@
 package gomoku.ui;
 
+import gomoku.*;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -77,7 +78,7 @@ public class GomokuUI extends JFrame implements Runnable  {
     /**  setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
      * Board
      */
-    private GomokuUIBoard gomokuUIBoard;
+    public GomokuUIBoard gomokuUIBoard;
     
     /**
      * The constructor
@@ -180,7 +181,8 @@ public class GomokuUI extends JFrame implements Runnable  {
         panel.add(timeLabel);
         panel.add(gomokuUIBoard);
               
-        show();
+        //setVisible(true);
+        //show();
     }
     
     /**
@@ -223,7 +225,8 @@ public class GomokuUI extends JFrame implements Runnable  {
      */
     @Override
     public void run() {
-        GomokuUI gomoku = new GomokuUI();
-        gomoku.setVisible(true);
+        //GomokuUI gomoku = new GomokuUI();
+        //gomoku.setVisible(true);
+        Gomoku.ui.setVisible(true);
     }
 }

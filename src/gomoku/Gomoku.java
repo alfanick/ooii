@@ -36,7 +36,7 @@ public class Gomoku {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Gomoku.ui = new GomokuUI();
+       Gomoku.ui = new GomokuUI();
        Gomoku.uiThread = new Thread(Gomoku.ui);
         
         // This should be done by UI when game starts

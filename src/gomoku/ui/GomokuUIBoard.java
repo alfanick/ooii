@@ -1,5 +1,6 @@
 package gomoku.ui;
 
+import gomoku.*;
 import gomoku.GameRules;
 import gomoku.GomokuBoard;
 import java.awt.Component;
@@ -62,15 +63,21 @@ public class GomokuUIBoard extends JComponent {
      */
     int hIntersectionsNumber;
     
+    Font smallFont;
+    
+    public GomokuUIBoard() {
+        smallFont = new Font("Georgia", Font.BOLD, FONTSIZE);
+    }
+    
     /**
      * Intersection measure method.
      * Used by paint method.
      * It checks vertival and horizontal intersections numbers and establishes left and top margin.
      */
     private void getIntersections() {
-        GameRules rules = new GameRules(new Rectangle(0, 0, 5, 5), new Rectangle(3, 3, 5, 5), 5);
+        //GameRules rules = new GameRules(new Rectangle(0, 0, 5, 5), new Rectangle(3, 3, 5, 5), 5);
         Rectangle board;
-        board = rules.getSizeRectangle();
+        board = Gomoku.game.referee.rules.getSizeRectangle(); //rules.getSizeRectangle();
         vIntersectionsNumber = board.height;
         hIntersectionsNumber = board.width;
         leftMargin = 20 + (900 - ((hIntersectionsNumber + 2) * INTERSPACE)) / 2;
@@ -86,31 +93,40 @@ public class GomokuUIBoard extends JComponent {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        Graphics2D g2d = (Graphics2D) g;
-        Graphics2D g2b = (Graphics2D) g;
-        Graphics2D g2w = (Graphics2D) g;
         
-        g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
+        g.setFont(smallFont);
         g.setColor(Color.black);
         
         getIntersections();
         
         for (int i = 1; i <= vIntersectionsNumber; i++) {
             g.drawString(numbers[i - 1], leftMargin - 25, topMargin + 5 + i * INTERSPACE);
-            g2d.drawLine(leftMargin, topMargin + i * INTERSPACE, leftMargin + (hIntersectionsNumber + 1) * INTERSPACE, topMargin + i * INTERSPACE);
+            g.drawLine(leftMargin, topMargin + i * INTERSPACE, leftMargin + (hIntersectionsNumber + 1) * INTERSPACE, topMargin + i * INTERSPACE);
         }
         for (int i = 1; i <= hIntersectionsNumber; i++) {
             g.drawString(letters[i - 1], leftMargin - 5 + i * INTERSPACE, topMargin - 15);
-            g2d.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
+            g.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
         }
-        g.setColor(Color.white);
-        for (int i = 0; i < hIntersectionsNumber; i ++) {
-            for (int j = 0; j < vIntersectionsNumber; j++) {
-                g2d.fillOval((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE); 
+
+        Point p = new Point();
+        for (p.x = 0; p.x < vIntersectionsNumber; p.x++) {
+            for (p.y = 0; p.y < hIntersectionsNumber; p.y++) {
+                switch (Gomoku.game.board.get(p)) {
+                    case A:
+                        g.setColor(Color.white);
+                        break;
+                    case B:
+                        g.setColor(Color.black);
+                        break;
+                    case FORBIDDEN:
+                        g.setColor(Color.lightGray);
+                        break;
+                    default:
+                        continue;
                 }
+                g.fillOval((leftMargin - CIRCLESIZE/2) + (p.y + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (p.x + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE); 
             }
-        
-        
+        }
         
         //throw new UnsupportedOperationException("Not supported yet.");
     }
