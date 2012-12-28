@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 //import java.awt.*;
 
 /**
@@ -190,6 +192,35 @@ public class GomokuUI extends JFrame implements Runnable  {
               
         //setVisible(true);
         //show();
+    }
+    
+    /**
+     * Progress timer
+     */
+    private Timer progressTimer;
+    
+    /**
+     * Starts moving progress bar
+     * 
+     * @param time Time for 100%
+     */
+    public void startTicking(float time) {
+        progressbar.setValue(0);
+        
+        progressTimer = new Timer();
+        progressTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                progressbar.setValue(Math.min(progressbar.getValue() + 1, 100));
+            } 
+        }, 0l, Math.round(time*1000)/100l);
+    }
+    
+    /**
+     * Stops moving progress bar
+     */
+    public void stopTicking() {
+        progressTimer.cancel();
     }
     
     /**

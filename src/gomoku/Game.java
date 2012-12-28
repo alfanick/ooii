@@ -113,6 +113,8 @@ public class Game implements Runnable {
                 playerThread.start();
 
                 try {
+                    Gomoku.ui.startTicking(this.playersTime[this.currentPlayer]);
+                    
                     // Let player thinks for given time 
                     Thread.sleep(Math.round(this.playersTime[this.currentPlayer] * 1000));
                     //System.out.println("Time out!");
@@ -122,6 +124,7 @@ public class Game implements Runnable {
                 } finally {
                     // Time has passed
                     this.players[this.currentPlayer].shouldMoveNow();
+                    Gomoku.ui.stopTicking();
 
                     // Stop thinking!
                     playerThread.interrupt();

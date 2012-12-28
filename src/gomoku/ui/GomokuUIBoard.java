@@ -77,7 +77,7 @@ public class GomokuUIBoard extends JComponent {
      * 
      * @param board Size rectangle
      */
-    public void createIntersections(Rectangle board) {
+    public final void createIntersections(Rectangle board) {
         //GameRules rules = new GameRules(new Rectangle(0, 0, 5, 5), new Rectangle(3, 3, 5, 5), 5);
         vIntersectionsNumber = board.width;
         hIntersectionsNumber = board.height;
