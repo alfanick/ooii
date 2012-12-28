@@ -1,10 +1,12 @@
 package gomoku.ui;
 
 import gomoku.*;
+import gomoku.player.TestPlayer;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 //import java.awt.*;
@@ -164,7 +166,12 @@ public class GomokuUI extends JFrame implements Runnable  {
         timeLabel.setFont(mediumFont);
         timeLabel.setBounds(LEFT_MARGIN, TOP_MARGIN + 420, 140, 50);
         
+        
+                
+        GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
+        
         gomokuUIBoard = new GomokuUIBoard();
+        gomokuUIBoard.createIntersections(rules.getSizeRectangle());
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
@@ -191,11 +198,11 @@ public class GomokuUI extends JFrame implements Runnable  {
     class startButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evnt) {
-            JTextField field1 = new JTextField();  
-            JTextField field2 = new JTextField();  
-            JTextField field3 = new JTextField();  
-            JTextField field4 = new JTextField();  
-            JTextField field5 = new JTextField();  
+            JTextField field1 = new JTextField("19");  
+            JTextField field2 = new JTextField("19");
+            JTextField field3 = new JTextField("5");  
+            JTextField field4 = new JTextField("0.1");  
+            JTextField field5 = new JTextField("0.1");  
             Object[] message = {
                 "RULES",
                 "Board width:", field1,  
@@ -212,7 +219,16 @@ public class GomokuUI extends JFrame implements Runnable  {
                 String boardHeight = field2.getText();  
                 String mInRow = field3.getText();  
                 String timeWhite = field4.getText();  
-                String timeBlack = field5.getText();  
+                String timeBlack = field5.getText();
+                
+                GameRules rules = new GameRules(new Rectangle(new Integer(boardHeight).intValue(),new Integer(boardWidth).intValue()), 
+                                                new Rectangle(new Integer(boardHeight).intValue(),new Integer(boardWidth).intValue()), new Integer(mInRow).intValue());
+                
+                gomokuUIBoard.createIntersections(rules.getSizeRectangle());
+                Gomoku.game = new Game(new TestPlayer(), new Float(timeWhite).floatValue(), new TestPlayer(), new Float(timeBlack).floatValue(), rules);
+                Gomoku.gameThread = new Thread(Gomoku.game);
+        
+                Gomoku.gameThread.start();
             }
          }
      }

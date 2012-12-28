@@ -67,19 +67,20 @@ public class GomokuUIBoard extends JComponent {
     
     public GomokuUIBoard() {
         smallFont = new Font("Georgia", Font.BOLD, FONTSIZE);
+        createIntersections(new Rectangle(3,3));
     }
     
     /**
      * Intersection measure method.
      * Used by paint method.
      * It checks vertival and horizontal intersections numbers and establishes left and top margin.
+     * 
+     * @param board Size rectangle
      */
-    private void getIntersections() {
+    public void createIntersections(Rectangle board) {
         //GameRules rules = new GameRules(new Rectangle(0, 0, 5, 5), new Rectangle(3, 3, 5, 5), 5);
-        Rectangle board;
-        board = Gomoku.game.referee.rules.getSizeRectangle(); //rules.getSizeRectangle();
-        vIntersectionsNumber = board.height;
-        hIntersectionsNumber = board.width;
+        vIntersectionsNumber = board.width;
+        hIntersectionsNumber = board.height;
         leftMargin = 20 + (900 - ((hIntersectionsNumber + 2) * INTERSPACE)) / 2;
         topMargin = 20 + (900 - ((vIntersectionsNumber + 2) * INTERSPACE)) / 2;
     }
@@ -97,8 +98,6 @@ public class GomokuUIBoard extends JComponent {
         g.setFont(smallFont);
         g.setColor(Color.black);
         
-        getIntersections();
-        
         for (int i = 1; i <= vIntersectionsNumber; i++) {
             g.drawString(numbers[i - 1], leftMargin - 25, topMargin + 5 + i * INTERSPACE);
             g.drawLine(leftMargin, topMargin + i * INTERSPACE, leftMargin + (hIntersectionsNumber + 1) * INTERSPACE, topMargin + i * INTERSPACE);
@@ -108,24 +107,28 @@ public class GomokuUIBoard extends JComponent {
             g.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
         }
 
-        Point p = new Point();
-        for (p.x = 0; p.x < vIntersectionsNumber; p.x++) {
-            for (p.y = 0; p.y < hIntersectionsNumber; p.y++) {
-                switch (Gomoku.game.board.get(p)) {
-                    case A:
-                        g.setColor(Color.white);
-                        break;
-                    case B:
-                        g.setColor(Color.black);
-                        break;
-                    case FORBIDDEN:
-                        g.setColor(Color.lightGray);
-                        break;
-                    default:
-                        continue;
+        try{
+            Point p = new Point();
+            for (p.x = 0; p.x < vIntersectionsNumber; p.x++) {
+                for (p.y = 0; p.y < hIntersectionsNumber; p.y++) {
+                    switch (Gomoku.game.board.get(p)) {
+                        case A:
+                            g.setColor(Color.white);
+                            break;
+                        case B:
+                            g.setColor(Color.black);
+                            break;
+                        case FORBIDDEN:
+                            g.setColor(Color.lightGray);
+                            break;
+                        default:
+                            continue;
+                    }
+                    g.fillOval((leftMargin - CIRCLESIZE/2) + (p.y + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (p.x + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE); 
                 }
-                g.fillOval((leftMargin - CIRCLESIZE/2) + (p.y + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (p.x + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE); 
             }
+        } catch (NullPointerException ex) {
+            
         }
         
         //throw new UnsupportedOperationException("Not supported yet.");

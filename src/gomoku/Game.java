@@ -98,7 +98,7 @@ public class Game implements Runnable {
         try {
             // Game loop
             while (true) {
-                System.out.printf("\n\nJestem %d\n", this.currentPlayer);
+                //System.out.printf("\n\nJestem %d\n", this.currentPlayer);
                 
                 // Create thread
                 playerThread = new Thread(this.players[this.currentPlayer]);
@@ -115,9 +115,9 @@ public class Game implements Runnable {
                 try {
                     // Let player thinks for given time 
                     Thread.sleep(Math.round(this.playersTime[this.currentPlayer] * 1000));
-                    System.out.println("Time out!");
+                    //System.out.println("Time out!");
                 } catch (InterruptedException ex) {
-                    System.out.println("Finished earlier.");
+                    //System.out.println("Finished earlier.");
                     // This shouldn't happen
                 } finally {
                     // Time has passed
@@ -146,13 +146,13 @@ public class Game implements Runnable {
                         // Put a pawn
                         this.board.set(move, GomokuBoardState.values()[this.currentPlayer]);
 
-                        System.out.println("Poprawny ruch");
+                        //System.out.println("Poprawny ruch");
                         
                         // Let UI draw new pawn
                         // Gomoku.ui.gomokuUIBoard.refresh();
                     }
                 } catch (IllegalMoveException ex) {
-                    System.out.println("Zły ruch, trace kolejke");
+                    //System.out.println("Zły ruch, trace kolejke");
 
                     // Illegal move is made - random move should be done
                     // Put pawn randomly in allowed rectangle
@@ -160,16 +160,17 @@ public class Game implements Runnable {
                     //this.board.setRandom(GomokuBoardState.values()[this.currentPlayer], 
                     //        firstMove ? this.referee.rules.getFirstMoveRectangle() : this.referee.rules.getSizeRectangle());
                 } finally {
-                    System.out.printf("Move (%d, %d)\n", move.x, move.y);
+                    //System.out.printf("Move (%d, %d)\n", move.x, move.y);
                     Gomoku.ui.repaint();
                 
                     // Lets kill thread if someone try to lock the system
                     if (playerThread.isAlive()) {
                         playerThread.stop();
                     }
+                    playerThread = null;
                     
                     
-                        this.board.print("PO RUCHU");
+                    //this.board.print("PO RUCHU");
 
                     // No more first move
                     firstMove = false;
@@ -184,8 +185,8 @@ public class Game implements Runnable {
             // Gomoku.ui.showCorruptedBoard(this.currentPlayer, ex);
 
             // Game is finished
-            System.out.printf("Uszkodzona plansza, koniec (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
-            System.out.printf("Wygrał %d!\n", this.currentPlayer);
+            //System.out.printf("Uszkodzona plansza, koniec (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
+            //System.out.printf("Wygrał %d!\n", this.currentPlayer);
         }
         catch (GameEndedException ex) {
             // Player won the game!
@@ -193,12 +194,12 @@ public class Game implements Runnable {
             // Gomoku.ui.showGameEnded(this.currentPlayer, ex);
 
             // Game is finished
-            System.out.printf("Koniec gry (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
+            //System.out.printf("Koniec gry (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
 
             this.board.set(ex.getPosition(), GomokuBoardState.values()[(this.currentPlayer+1)%2]);
             Gomoku.ui.repaint();
                 
-            this.board.print("KONIEC");
+            //this.board.print("KONIEC");
             
             if (ex instanceof DrawGameEndedException) {
                 System.out.println("Remis!");
