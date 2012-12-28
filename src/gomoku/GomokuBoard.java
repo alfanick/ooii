@@ -45,7 +45,7 @@ public class GomokuBoard {
     public GomokuBoard(Rectangle size) {
         this.size = size;
         this.board = new GomokuBoardState[size.width][size.height];
-        this.lastMove = new Point(0,0);
+        this.lastMove = new Point(-1,-1);
         
         this.clean();
 
@@ -96,7 +96,7 @@ public class GomokuBoard {
      * @param state State of board
      */
     public final void sweep(GomokuBoardState state) {
-        this.lastMove = new Point(0,0);
+        this.lastMove = new Point(-1,-1);
         
         for (int x = 0; x < this.size.width; x++) {
             for (int y = 0; y < this.size.height; y++) {
