@@ -257,6 +257,9 @@ public class GomokuUI extends JFrame implements Runnable  {
                 
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
                 Gomoku.game = new Game(new TestPlayer(), new Float(timeWhite).floatValue(), new TestPlayer(), new Float(timeBlack).floatValue(), rules);
+                
+                gomokuUIBoard.repaint();
+                
                 Gomoku.gameThread = new Thread(Gomoku.game);
         
                 Gomoku.gameThread.start();
