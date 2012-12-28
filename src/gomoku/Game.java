@@ -205,9 +205,9 @@ public class Game implements Runnable {
             //this.board.print("KONIEC");
             
             if (ex instanceof DrawGameEndedException) {
-                System.out.println("Remis!");
+                Gomoku.ui.showDrawMessage();
             } else {
-                System.out.printf("Wygrał %d!\n", (this.currentPlayer+1)%2);
+                Gomoku.ui.showWinnerMessage(ex.getPosition());
             }
         }
     }

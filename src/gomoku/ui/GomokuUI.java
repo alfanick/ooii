@@ -258,17 +258,25 @@ public class GomokuUI extends JFrame implements Runnable  {
         //show();
     }
     
-    public void endGameMess() {
-        JOptionPane.showMessageDialog(new JPanel(),"Gratuluję, wygrałeś!", "Koniec gry", JOptionPane.PLAIN_MESSAGE);
-        JOptionPane.showMessageDialog(new JPanel(),"Niestety przegrałeś, spróbuj jeszcze raz.", "Koniec gry", JOptionPane.PLAIN_MESSAGE);
-        JOptionPane.showMessageDialog(new JPanel(),"Tym razem zremisowałeś.", "Koniec gry", JOptionPane.PLAIN_MESSAGE);
+    public void showDrawMessage() {
+        JOptionPane.showMessageDialog(new JPanel(),"Draw!", "End of game", JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    public void showWinnerMessage(Point p) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(GomokuUIBoard.letters[p.y]);
+        sb.append(GomokuUIBoard.numbers[p.x]);
+        sb.append(Gomoku.game.board.get(p) == GomokuBoardState.A ? ", White" : ", Black");
+        sb.append(" won!");
+        
+        JOptionPane.showMessageDialog(new JPanel(),sb.toString(), "End of game", JOptionPane.PLAIN_MESSAGE);
     }
     
     /**
-    * Listener class.
-    */
+     * Listener class.
+     */
     class stopButtonListener implements ActionListener {
-        //@Override
+        @Override
         public void actionPerformed(ActionEvent evnt) {
             JOptionPane.showMessageDialog(new JPanel(),"Stop");
         }

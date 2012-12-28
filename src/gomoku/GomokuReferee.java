@@ -86,8 +86,7 @@ public class GomokuReferee {
                 
                 //checking if it is first move
                 if(history.empty()){
-                    previousBoard.cleanWithForbidden(rules.getFirstMoveRectangle());
-                    Gomoku.game.board.cleanWithForbidden(rules.getFirstMoveRectangle());
+                    previousBoard.clean();
                 }
                 
                 //state of a field depends on which of players takes turn
