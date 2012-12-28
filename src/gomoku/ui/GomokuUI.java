@@ -1,11 +1,16 @@
 package gomoku.ui;
 
+import gomoku.*;
+import gomoku.player.TestPlayer;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 //import java.awt.*;
 
 /**
@@ -28,6 +33,11 @@ public class GomokuUI extends JFrame implements Runnable  {
       * Vertical size
       */
      static final int V_SIZE = 900;
+     
+     
+     static final int LEFT_MARGIN = 50;
+     
+     static final int TOP_MARGIN = 100;
 
     /**
      * Header (or it can be changed for img)
@@ -72,7 +82,7 @@ public class GomokuUI extends JFrame implements Runnable  {
     /**  setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
      * Board
      */
-    private GomokuUIBoard gomokuUIBoard;
+    public GomokuUIBoard gomokuUIBoard;
     
     /**
      * The constructor
@@ -96,11 +106,15 @@ public class GomokuUI extends JFrame implements Runnable  {
         setResizable(false);
         
         String[] players = {
-	"Human 1", "Human 2", 
+	"Human",
         "Bot 1", "Bot 2", 
 	"Bot 3", "Bot 4",
         "Bot 5", "Bot 6"
         };
+        
+        Font smallFont = new Font("Verdana", Font.BOLD, 18);
+        Font mediumFont = new Font("Verdana", Font.BOLD, 24);
+        Font headerFont = new Font("Georgia", Font.BOLD, 32);
         
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -110,59 +124,65 @@ public class GomokuUI extends JFrame implements Runnable  {
         JPanel player2Panel = new JPanel();
         
         gomokuHeader = new JLabel("GOMOKU", JLabel.CENTER);
-        gomokuHeader.setFont(new Font("Verdana", Font.BOLD, 32));
-        gomokuHeader.setBounds(50, 100, 200, 100);
+        gomokuHeader.setFont(headerFont);
+        gomokuHeader.setBounds(LEFT_MARGIN/2, TOP_MARGIN, 200, 100);
         
-        player1 = new JLabel("Player 1", JLabel.CENTER);
-        player1.setFont(new Font("Verdana", Font.BOLD, 18));
-        player1.setForeground(Color.white);
-        player1Panel.setBackground(Color.black);
+        player1 = new JLabel("White", JLabel.CENTER);
+        player1.setFont(smallFont);
+        player1.setForeground(Color.black);
+        player1Panel.setBackground(Color.white);
         player1Panel.add(player1);
-        player1.setBounds(80, 300, 140, 50);
-        player1Panel.setBounds(80, 300, 140, 50);
+        player1.setBounds(LEFT_MARGIN, TOP_MARGIN + 200, 140, 50);
+        player1Panel.setBounds(LEFT_MARGIN, TOP_MARGIN + 200, 140, 90);
         
-        player2 = new JLabel("Player 2", JLabel.CENTER);
-        player2.setFont(new Font("Verdana", Font.BOLD, 18));
-        player2Panel.setBackground(Color.white);
+        player2 = new JLabel("Black", JLabel.CENTER);
+        player2.setFont(smallFont);
+        player2.setForeground(Color.white);
+        player2Panel.setBackground(Color.black);
         player2Panel.add(player2);
-        player2.setBounds(80, 380, 140, 50);
-        player2Panel.setBounds(80, 380, 140, 50);
+        player2.setBounds(LEFT_MARGIN, TOP_MARGIN + 280, 140, 50);
+        player2Panel.setBounds(LEFT_MARGIN, TOP_MARGIN + 280, 140, 90);
         
         combobox1 = new JComboBox(players);
-        combobox1.setSelectedIndex(-1);
-        combobox1.setBounds(80, 350 , 140, 30);
+        combobox1.setSelectedIndex(0);
+        combobox1.setBounds(LEFT_MARGIN, TOP_MARGIN + 250 , 140, 30);
         
         combobox2 = new JComboBox(players);
-        combobox2.setSelectedIndex(-1);
-        combobox2.setBounds(80, 430 , 140, 30);
+        combobox2.setSelectedIndex(0);
+        combobox2.setBounds(LEFT_MARGIN, TOP_MARGIN + 330 , 140, 30);
         
         progressbar = new JProgressBar();
-        progressbar.setBounds(80, 570 , 140, 30);
+        progressbar.setBounds(LEFT_MARGIN, TOP_MARGIN + 470 , 140, 30);
         
         startButton = new JButton("Start");
-        startButton.setBounds(80, 620, 140, 50);
+        startButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 520, 140, 50);
         startButton.addActionListener(new startButtonListener());
         
         stopButton = new JButton("Stop");
-        stopButton.setBounds(80, 690, 140, 50);
+        stopButton.setBounds(LEFT_MARGIN + 100, TOP_MARGIN + 590, 40, 50);
         
         pauseButton = new JButton("Pause");
-        pauseButton.setBounds(80, 760, 140, 50);
+        pauseButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 590, 100, 50);
         
         timeLabel = new JLabel("Time", JLabel.CENTER);
-        timeLabel.setFont(new Font("Verdana", Font.BOLD, 24));
-        timeLabel.setBounds(80, 520, 140, 50);
+        timeLabel.setFont(mediumFont);
+        timeLabel.setBounds(LEFT_MARGIN, TOP_MARGIN + 420, 140, 50);
+        
+        
+                
+        GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
         
         gomokuUIBoard = new GomokuUIBoard();
+        gomokuUIBoard.createIntersections(rules.getSizeRectangle());
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
+        panel.add(combobox1);
+        panel.add(combobox2);
         panel.add(player1);
         panel.add(player1Panel);
         panel.add(player2);
         panel.add(player2Panel);
-        panel.add(combobox1);
-        panel.add(combobox2);
         panel.add(progressbar);
         panel.add(startButton);
         panel.add(stopButton);
@@ -170,21 +190,59 @@ public class GomokuUI extends JFrame implements Runnable  {
         panel.add(timeLabel);
         panel.add(gomokuUIBoard);
               
-        show();
+        //setVisible(true);
+        //show();
+    }
+    
+    /**
+     * Progress timer
+     */
+    private Timer progressTimer;
+    
+    /**
+     * Starts moving progress bar
+     * 
+     * @param time Time for 100%
+     */
+    public void startTicking(float time) {
+        progressbar.setValue(0);
+        
+        progressTimer = new Timer();
+        progressTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                progressbar.setValue(Math.min(progressbar.getValue() + 1, 100));
+            } 
+        }, 0l, Math.round(time*1000)/100l);
+    }
+    
+    /**
+     * Stops moving progress bar
+     */
+    public void stopTicking() {
+        progressTimer.cancel();
     }
     
     /**
      * Listener class.
      */
     class startButtonListener implements ActionListener {
+        int boardWidth, boardHeight, mInRow;
+        float timeWhite, timeBlack;
         @Override
         public void actionPerformed(ActionEvent evnt) {
+
             boolean excep;
-            JTextField field1 = new JTextField();  
-            JTextField field2 = new JTextField();  
-            JTextField field3 = new JTextField();  
-            JTextField field4 = new JTextField();  
-            JTextField field5 = new JTextField();  
+            JTextField field1 = new JTextField("19");  
+            JTextField field2 = new JTextField("19");
+            JTextField field3 = new JTextField("5");  
+            JTextField field4 = new JTextField("0.1");  
+            JTextField field5 = new JTextField("0.1");            
+            JTextField field6 = new JTextField("0");  
+            JTextField field7 = new JTextField("1");
+            JTextField field8 = new JTextField("5");  
+            JTextField field9 = new JTextField("0.1");  
+
             Object[] message = {
                 "RULES",
                 "Board width:", field1,  
@@ -198,14 +256,15 @@ public class GomokuUI extends JFrame implements Runnable  {
                 excep = false;
                 int option = JOptionPane.showConfirmDialog(new JPanel(), message, "Star Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
             
+
                 if (option == JOptionPane.OK_OPTION) {
                     try {
-                        int boardWidth = Integer.parseInt(field1.getText()); 
-                        int boardHeight = Integer.parseInt(field2.getText());  
-                        int mInRow = Integer.parseInt(field3.getText());  
-                        double timeWhite = Double.parseDouble(field4.getText());  
-                        double timeBlack = Double.parseDouble(field5.getText());  
-                        if  (boardWidth > 19 || boardHeight > 19) {
+                       boardWidth = Integer.parseInt(field1.getText()); 
+                       boardHeight = Integer.parseInt(field2.getText());  
+                       mInRow = Integer.parseInt(field3.getText());  
+                       timeWhite = Float.parseFloat(field4.getText());  
+                       timeBlack = Float.parseFloat(field5.getText());  
+                        if  (boardWidth > 19 || boardHeight > 19 || boardWidth < 3 || boardHeight < 3) {
                             excep = true;
                             JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.PLAIN_MESSAGE);
                        }
@@ -215,9 +274,18 @@ public class GomokuUI extends JFrame implements Runnable  {
                          }
                    }
                } while (excep);
-                startButton.setText("Pause");
+                startButton.setText("Pause");          
+                GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
+                                                new Rectangle(boardHeight, boardWidth), mInRow);
+                
+                gomokuUIBoard.createIntersections(rules.getSizeRectangle());
+                Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
+                Gomoku.gameThread = new Thread(Gomoku.game);
+        
+                Gomoku.gameThread.start();
          }
-     }
+   }
+    
       
     
     
@@ -227,7 +295,8 @@ public class GomokuUI extends JFrame implements Runnable  {
      */
     @Override
     public void run() {
-        GomokuUI gomoku = new GomokuUI();
-        gomoku.setVisible(true);
+        //GomokuUI gomoku = new GomokuUI();
+        //gomoku.setVisible(true);
+        Gomoku.ui.setVisible(true);
     }
 }
