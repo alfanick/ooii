@@ -230,10 +230,10 @@ public class GomokuUI extends JFrame implements Runnable  {
                 
         
         
-        GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
+      //  GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
         
         gomokuUIBoard = new GomokuUIBoard();
-        gomokuUIBoard.createIntersections(rules.getSizeRectangle());
+    //    gomokuUIBoard.createIntersections(rules.getSizeRectangle());
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
@@ -293,7 +293,7 @@ public class GomokuUI extends JFrame implements Runnable  {
      * Listener class.
      */
     class startButtonListener implements ActionListener {
-        int boardWidth, boardHeight, mInRow;
+        int boardWidth, boardHeight, firstMoveX, firstMoveY, firstMoveBoardWidth, firstMoveBoardHeight, mInRow;
         float timeWhite, timeBlack;
         @Override
         public void actionPerformed(ActionEvent evnt) {
@@ -305,9 +305,9 @@ public class GomokuUI extends JFrame implements Runnable  {
             JTextField field4 = new JTextField("0.1");  
             JTextField field5 = new JTextField("0.1");            
             JTextField field6 = new JTextField("0");  
-            JTextField field7 = new JTextField("1");
-            JTextField field8 = new JTextField("5");  
-            JTextField field9 = new JTextField("0.1");  
+            JTextField field7 = new JTextField("0");
+            JTextField field8 = new JTextField("19");  
+            JTextField field9 = new JTextField("19");  
 
             Object[] message = {
                 "RULES",
@@ -316,6 +316,10 @@ public class GomokuUI extends JFrame implements Runnable  {
                 "M-in-row:", field3,  
                 "Time for white player:", field4,  
                 "Time for nigger:", field5,  
+                "First move x:", field6,
+                "First move y:", field7,
+                "First move board width:", field8,
+                "First move board height:", field9
             };  
             
             do {
@@ -330,10 +334,17 @@ public class GomokuUI extends JFrame implements Runnable  {
                        mInRow = Integer.parseInt(field3.getText());  
                        timeWhite = Float.parseFloat(field4.getText());  
                        timeBlack = Float.parseFloat(field5.getText());  
+                       firstMoveX = Integer.parseInt(field6.getText()); 
+                       firstMoveY = Integer.parseInt(field7.getText()); 
+                       firstMoveBoardWidth = Integer.parseInt(field8.getText()); 
+                       firstMoveBoardHeight = Integer.parseInt(field9.getText()); 
                         if  (boardWidth > 19 || boardHeight > 19 || boardWidth < 3 || boardHeight < 3) {
                             excep = true;
                             JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.PLAIN_MESSAGE);
-                       } else if (mInRow > Math.min(boardHeight, boardWidth)) {
+                       }    else if (firstMoveBoardWidth > boardWidth || firstMoveBoardHeight > boardHeight) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Board's first move space cannot be bigger than board's size!", "Wrong first move board size!", JOptionPane.PLAIN_MESSAGE); 
+                       }    else if (mInRow > Math.min(boardHeight, boardWidth)) {
                             excep = true;
                             JOptionPane.showMessageDialog(new JPanel(), "M-in-row must be less or equal to shorter side", "Wrong M-in-row length!", JOptionPane.PLAIN_MESSAGE);    
                        }
@@ -354,7 +365,7 @@ public class GomokuUI extends JFrame implements Runnable  {
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
                 stopTicking();
                 Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
-                gomokuUIBoard.repaint();
+            //    gomokuUIBoard.repaint();
                 
                 Gomoku.gameThread = new Thread(Gomoku.game);
         
