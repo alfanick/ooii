@@ -22,7 +22,7 @@ public final class HumanPlayer implements PlayerInterface {
      * 
      * @param p 
      */
-    private void clickedAt(Point p){
+    public void clickedAt(Point p){
         point = p;
         Gomoku.gameThread.interrupt();
     }
@@ -63,7 +63,7 @@ public final class HumanPlayer implements PlayerInterface {
      */
     @Override
     public void run() {
-        while(!Thread.interrupted());
+        //while(!Thread.interrupted());
     }
     
     /**
