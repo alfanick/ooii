@@ -252,7 +252,7 @@ public class GomokuUI extends JFrame implements Runnable  {
                 
         
         
-        GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
+        rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
         
         gomokuUIBoard = new GomokuUIBoard();
         gomokuUIBoard.createIntersections(rules.getSizeRectangle());
@@ -341,41 +341,50 @@ public class GomokuUI extends JFrame implements Runnable  {
         }
     }
     
-    private PlayerInterface createPlayer(String name) {
+    private PlayerInterface createPlayer(JComboBox combo) {
         PlayerInterface player = null;
+        String name = (String) combo.getSelectedItem();
+        
         
         if (name.equals("Human")) {
             player = new HumanPlayer();
-        } else if (name.equals("TestPlayer")) {
-            player = new TestPlayer();
         } else {
-            try {
-                StringBuilder fname = new StringBuilder();
-                
-                fname.append(name).append(".jar");
-                File botFile = new File("bots", fname.toString());
+            if (name.equals("TestPlayer")) {
+                player = new TestPlayer();
+            } else {
+                try {
+                    StringBuilder fname = new StringBuilder();
 
-                URLClassLoader botLoader = new URLClassLoader(new URL[] { botFile.toURI().toURL() });
-                Class botClass = botLoader.loadClass("gomoku.player.Bot");
-                player = (PlayerInterface) botClass.newInstance();
-            } catch (InstantiationException ex) {
-                Logger.getLogger(GomokuUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(GomokuUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MalformedURLException | ClassNotFoundException ex) {
-                Logger.getLogger(GomokuUI.class.getName()).log(Level.SEVERE, null, ex);
+                    fname.append(name).append(".jar");
+                    File botFile = new File("bots", fname.toString());
+
+                    URLClassLoader botLoader = new URLClassLoader(new URL[] { botFile.toURI().toURL() });
+                    Class botClass = botLoader.loadClass("gomoku.player.Bot");
+                    player = (PlayerInterface) botClass.newInstance();
+                } catch (MalformedURLException | ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                    Logger.getLogger(GomokuUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        }   
+        }
                     
         return player;
     }
+    
+    /**
+     * Gomoku rules
+     */
+    private GameRules rules;
+    
+    private float timeWhite = -1;
+    
+    private float timeBlack = -1;
     
     /**
      * Listener class.
      */
     class startButtonListener implements ActionListener {
         int boardWidth, boardHeight, firstMoveX, firstMoveY, firstMoveBoardWidth, firstMoveBoardHeight, mInRow;
-        float timeWhite, timeBlack;
+        
         @Override
         public void actionPerformed(ActionEvent evnt) {
             if (startButton.getText().equals("Pause")) {
@@ -406,6 +415,32 @@ public class GomokuUI extends JFrame implements Runnable  {
             JTextField field7 = new JTextField("7");
             JTextField field8 = new JTextField("5");  
             JTextField field9 = new JTextField("5");  
+            
+            if (rules != null) {
+                field1.setText(rules.getSizeRectangle().width + "");
+                field2.setText(rules.getSizeRectangle().height + "");
+                field3.setText(rules.getInRowToWin() + "");
+            
+                if (timeWhite == -1) {
+                    if (((String) combobox1.getSelectedItem()).equals("Human")) {
+                        timeWhite = 30.0f;
+                    } else {
+                        timeWhite = 0.1f;
+                    }
+                    if (((String) combobox2.getSelectedItem()).equals("Human")) {
+                        timeBlack = 30.0f;
+                    } else {
+                        timeBlack = 0.1f;
+                    }
+                }
+            
+                field4.setText(timeWhite + "");
+                field5.setText(timeBlack + "");
+                field6.setText(rules.getFirstMoveRectangle().x + "");
+                field7.setText(rules.getFirstMoveRectangle().y + "");
+                field8.setText(rules.getFirstMoveRectangle().height + "");
+                field9.setText(rules.getFirstMoveRectangle().width + "");
+            }
 
             Object[] message = {
                 "RULES",
@@ -449,6 +484,9 @@ public class GomokuUI extends JFrame implements Runnable  {
                        }    else if ((firstMoveX+ firstMoveBoardWidth > boardWidth) || (firstMoveX + firstMoveBoardHeight > boardHeight)) {
                             excep = true;
                             JOptionPane.showMessageDialog(new JPanel(), "Start rectangle must fit game board", "Wrong start rectangle!", JOptionPane.ERROR_MESSAGE);    
+                       }    else if ((timeWhite < 0.01 || timeWhite > 3600) || (timeBlack < 0.01 || timeBlack > 3600)) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Time must be longer than 0.01 and shorter than 3600", "Wrong periods", JOptionPane.ERROR_MESSAGE);     
                        }
                     }   catch (NumberFormatException exception) {
                             excep = true;
@@ -463,14 +501,14 @@ public class GomokuUI extends JFrame implements Runnable  {
                     progressbar.setValue(0);
                     list.setEnabled(true);
 
-                    GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
+                    rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
                                                     new Rectangle(firstMoveX, firstMoveY, firstMoveBoardHeight, firstMoveBoardWidth), mInRow);
 
                     gomokuUIBoard.createIntersections(rules.getSizeRectangle());
                     stopTicking();
                     
-                    PlayerInterface whitePlayer = createPlayer((String) combobox1.getSelectedItem());
-                    PlayerInterface blackPlayer = createPlayer((String) combobox2.getSelectedItem());
+                    PlayerInterface whitePlayer = createPlayer(combobox1);
+                    PlayerInterface blackPlayer = createPlayer(combobox2);
                     
                     Gomoku.game = new Game(whitePlayer, timeWhite, blackPlayer, timeBlack, rules);
      
