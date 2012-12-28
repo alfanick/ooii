@@ -260,6 +260,8 @@ public class GomokuUI extends JFrame implements Runnable  {
     
     public void showDrawMessage() {
         JOptionPane.showMessageDialog(new JPanel(),"Draw!", "End of game", JOptionPane.PLAIN_MESSAGE);
+        
+        startButton.setText("Start");
     }
     
     public void showWinnerMessage(Point p) {
@@ -268,6 +270,8 @@ public class GomokuUI extends JFrame implements Runnable  {
         sb.append(GomokuUIBoard.numbers[p.x]);
         sb.append(Gomoku.game.board.get(p) == GomokuBoardState.A ? ", White" : ", Black");
         sb.append(" won!");
+        
+        startButton.setText("Start");
         
         JOptionPane.showMessageDialog(new JPanel(),sb.toString(), "End of game", JOptionPane.PLAIN_MESSAGE);
     }
@@ -347,11 +351,12 @@ public class GomokuUI extends JFrame implements Runnable  {
                 "First move y:", field7,
                 "First move board width:", field8,
                 "First move board height:", field9
-            };  
+            };
             
+            int option;
             do {
                 excep = false;
-                int option = JOptionPane.showConfirmDialog(new JPanel(), message, "Star Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
+                option = JOptionPane.showConfirmDialog(new JPanel(), message, "Start Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
             
 
                 if (option == JOptionPane.OK_OPTION) {
@@ -367,13 +372,16 @@ public class GomokuUI extends JFrame implements Runnable  {
                        firstMoveBoardHeight = Integer.parseInt(field9.getText()); 
                         if  (boardWidth > 19 || boardHeight > 19 || boardWidth < 3 || boardHeight < 3) {
                             excep = true;
-                            JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.ERROR_MESSAGE);
                        }    else if (firstMoveBoardWidth > boardWidth || firstMoveBoardHeight > boardHeight) {
                             excep = true;
-                            JOptionPane.showMessageDialog(new JPanel(), "Board's first move space cannot be bigger than board's size!", "Wrong first move board size!", JOptionPane.PLAIN_MESSAGE); 
+                            JOptionPane.showMessageDialog(new JPanel(), "Board's first move space cannot be bigger than board's size!", "Wrong first move board size!", JOptionPane.ERROR_MESSAGE); 
                        }    else if (mInRow > Math.min(boardHeight, boardWidth)) {
                             excep = true;
-                            JOptionPane.showMessageDialog(new JPanel(), "M-in-row must be less or equal to shorter side", "Wrong M-in-row length!", JOptionPane.PLAIN_MESSAGE);    
+                            JOptionPane.showMessageDialog(new JPanel(), "M-in-row must be less or equal to shorter side", "Wrong M-in-row length!", JOptionPane.ERROR_MESSAGE);    
+                       }    else if ((firstMoveX+ firstMoveBoardWidth > boardWidth) || (firstMoveX + firstMoveBoardHeight > boardHeight)) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Start rectangle must fit game board", "Wrong start rectangle!", JOptionPane.ERROR_MESSAGE);    
                        }
                     }   catch (NumberFormatException exception) {
                             excep = true;
@@ -381,23 +389,25 @@ public class GomokuUI extends JFrame implements Runnable  {
                          }
                    }
                } while (excep);
-                startButton.setText("Pause");          
-                historyModel.clear();
-                historyModel.addElement("Game started");
-                progressbar.setValue(0);
-                
-                GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
-                                                new Rectangle(firstMoveX, firstMoveY, firstMoveBoardHeight, firstMoveBoardWidth), mInRow);
-                
-                gomokuUIBoard.createIntersections(rules.getSizeRectangle());
-                stopTicking();
-                Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
-                //refresh();
-                gomokuUIBoard.repaint();
-                
-                Gomoku.gameThread = new Thread(Gomoku.game);
-        
-                Gomoku.gameThread.start();
+                if (option == JOptionPane.OK_OPTION) {
+                    startButton.setText("Pause");          
+                    historyModel.clear();
+                    historyModel.addElement("Game started");
+                    progressbar.setValue(0);
+
+                    GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
+                                                    new Rectangle(firstMoveX, firstMoveY, firstMoveBoardHeight, firstMoveBoardWidth), mInRow);
+
+                    gomokuUIBoard.createIntersections(rules.getSizeRectangle());
+                    stopTicking();
+                    Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
+                    //refresh();
+                    gomokuUIBoard.repaint();
+
+                    Gomoku.gameThread = new Thread(Gomoku.game);
+
+                    Gomoku.gameThread.start();
+                }
          }
    }
     
