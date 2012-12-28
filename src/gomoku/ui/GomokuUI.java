@@ -179,6 +179,7 @@ public class GomokuUI extends JFrame implements Runnable  {
     class startButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evnt) {
+            boolean excep;
             JTextField field1 = new JTextField();  
             JTextField field2 = new JTextField();  
             JTextField field3 = new JTextField();  
@@ -193,15 +194,23 @@ public class GomokuUI extends JFrame implements Runnable  {
                 "Time for nigger:", field5,  
             };  
             //class startPopUp 
-            int option = JOptionPane.showConfirmDialog(new JPanel(), message, "Star Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
+            do {
+                excep = false;
+                int option = JOptionPane.showConfirmDialog(new JPanel(), message, "Star Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
             
-            if (option == JOptionPane.OK_OPTION) {
-                String boardWidth = field1.getText();  
-                String boardHeight = field2.getText();  
-                String mInRow = field3.getText();  
-                String timeWhite = field4.getText();  
-                String timeBlack = field5.getText();  
-            }
+                if (option == JOptionPane.OK_OPTION) {
+                    try {
+                        int boardWidth = Integer.parseInt(field1.getText()); 
+                        int boardHeight = Integer.parseInt(field2.getText());  
+                        int mInRow = Integer.parseInt(field3.getText());  
+                        double timeWhite = Double.parseDouble(field4.getText());  
+                        double timeBlack = Double.parseDouble(field5.getText());  
+                    }   catch (NumberFormatException exception) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Not all fields are right numbers!", "Wrong input!", JOptionPane.WARNING_MESSAGE);
+                         } 
+                   }
+              } while (excep);
          }
      }
       
