@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -89,6 +90,11 @@ public class GomokuUI extends JFrame implements Runnable  {
      */
     private JLabel historyLabel;
     
+    /**
+     * Model for history
+     */
+    public DefaultListModel historyModel;
+    
     /**  setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
      * Board
      */
@@ -98,6 +104,7 @@ public class GomokuUI extends JFrame implements Runnable  {
      * The constructor
      */
     public GomokuUI() {
+        historyModel = new DefaultListModel();
         initUI();
     }
     
@@ -126,18 +133,7 @@ public class GomokuUI extends JFrame implements Runnable  {
          * Zapis historii ruchow graczy/botow 
          */
         String[] history = {
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3",
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3",
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3",
-            "White A4", "Black B6",
-            "White F7", "Black C2",
-            "White F4", "Black E3"
+            "New game"
         };
         
         Font smallFont = new Font("Verdana", Font.BOLD, 18);
@@ -183,6 +179,8 @@ public class GomokuUI extends JFrame implements Runnable  {
         progressbar.setBounds(LEFT_MARGIN, TOP_MARGIN + 470 , 90, 30);
         
         list = new JList(history);
+        list.setModel(historyModel);
+        
         JScrollPane pane = new JScrollPane();
         pane.getViewport().add(list);
         pane.setBounds(LEFT_MARGIN + 120, TOP_MARGIN + 470, 100, 150);
@@ -204,9 +202,9 @@ public class GomokuUI extends JFrame implements Runnable  {
         historyLabel = new JLabel("History", JLabel.CENTER);
         historyLabel.setFont(mediumFont);
         historyLabel.setBounds(LEFT_MARGIN + 120, TOP_MARGIN + 420, 100, 50);
-        
-        
                 
+        
+        
         GameRules rules = new GameRules(new Rectangle(19,19), new Rectangle(7,7,5,5), 5);
         
         gomokuUIBoard = new GomokuUIBoard();
@@ -317,6 +315,9 @@ public class GomokuUI extends JFrame implements Runnable  {
                    }
                } while (excep);
                 startButton.setText("Pause");          
+                historyModel.clear();
+                historyModel.addElement("Game started");
+                
                 GameRules rules = new GameRules(new Rectangle(boardHeight, boardWidth), 
                                                 new Rectangle(boardHeight, boardWidth), mInRow);
                 
@@ -330,6 +331,21 @@ public class GomokuUI extends JFrame implements Runnable  {
                 Gomoku.gameThread.start();
          }
    }
+    
+    @Override
+    public void repaint() {
+        Point p = Gomoku.game.board.lastMove();
+        if (p.x != -1) {
+            StringBuilder s = new StringBuilder();
+            s.append(Gomoku.game.board.get(p) == GomokuBoardState.A ? "White" : "Black");
+            s.append(' ');
+            s.append(GomokuUIBoard.letters[p.y]);
+            s.append(GomokuUIBoard.numbers[p.x]);
+            this.historyModel.add(0, s);
+        }
+       
+        super.repaint();
+    }
     
       
     
