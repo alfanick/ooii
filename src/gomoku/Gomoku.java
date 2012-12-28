@@ -37,7 +37,7 @@ public class Gomoku {
      */
     public static void main(String[] args) {
         Gomoku.ui = new GomokuUI();
-       Gomoku.uiThread = new Thread(Gomoku.ui);
+       //Gomoku.uiThread = new Thread(Gomoku.ui);
         
         // This should be done by UI when game starts
         GameRules rules = new GameRules(new Rectangle(6,6), new Rectangle(6,6), 4);
