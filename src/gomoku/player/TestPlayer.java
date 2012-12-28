@@ -48,6 +48,8 @@ public final class TestPlayer implements PlayerInterface {
                 this.position.x = rnd.nextInt(this.rules.getSizeRectangle().width);
                 this.position.y = rnd.nextInt(this.rules.getSizeRectangle().height);
             } while (board.get(this.position) != GomokuBoardState.EMPTY);
+            
+            Gomoku.gameThread.interrupt();
         }
     }
 

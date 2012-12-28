@@ -8,3 +8,6 @@
 /bin/
 /doc/
 /dist
+private.xml
+private.properties
+private/*

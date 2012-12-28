@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 //import java.awt.*;
 
 /**
@@ -107,11 +109,11 @@ public class GomokuUI extends JFrame implements Runnable  {
         JPanel player1Panel = new JPanel();
         JPanel player2Panel = new JPanel();
         
-        JLabel gomokuHeader = new JLabel("GOMOKU", JLabel.CENTER);
+        gomokuHeader = new JLabel("GOMOKU", JLabel.CENTER);
         gomokuHeader.setFont(new Font("Verdana", Font.BOLD, 32));
         gomokuHeader.setBounds(50, 100, 200, 100);
         
-        JLabel player1 = new JLabel("Player 1", JLabel.CENTER);
+        player1 = new JLabel("Player 1", JLabel.CENTER);
         player1.setFont(new Font("Verdana", Font.BOLD, 18));
         player1.setForeground(Color.white);
         player1Panel.setBackground(Color.black);
@@ -119,7 +121,7 @@ public class GomokuUI extends JFrame implements Runnable  {
         player1.setBounds(80, 300, 140, 50);
         player1Panel.setBounds(80, 300, 140, 50);
         
-        JLabel player2 = new JLabel("Player 2", JLabel.CENTER);
+        player2 = new JLabel("Player 2", JLabel.CENTER);
         player2.setFont(new Font("Verdana", Font.BOLD, 18));
         player2Panel.setBackground(Color.white);
         player2Panel.add(player2);
@@ -134,23 +136,24 @@ public class GomokuUI extends JFrame implements Runnable  {
         combobox2.setSelectedIndex(-1);
         combobox2.setBounds(80, 430 , 140, 30);
         
-        JProgressBar progressbar = new JProgressBar();
+        progressbar = new JProgressBar();
         progressbar.setBounds(80, 570 , 140, 30);
         
-        JButton startButton = new JButton("Start");
+        startButton = new JButton("Start");
         startButton.setBounds(80, 620, 140, 50);
+        startButton.addActionListener(new startButtonListener());
         
-        JButton stopButton = new JButton("Stop");
+        stopButton = new JButton("Stop");
         stopButton.setBounds(80, 690, 140, 50);
         
-        JButton pauseButton = new JButton("Pause");
+        pauseButton = new JButton("Pause");
         pauseButton.setBounds(80, 760, 140, 50);
         
-        JLabel timeLabel = new JLabel("Time", JLabel.CENTER);
+        timeLabel = new JLabel("Time", JLabel.CENTER);
         timeLabel.setFont(new Font("Verdana", Font.BOLD, 24));
         timeLabel.setBounds(80, 520, 140, 50);
         
-        GomokuUIBoard gomokuUIBoard = new GomokuUIBoard();
+        gomokuUIBoard = new GomokuUIBoard();
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
@@ -171,11 +174,59 @@ public class GomokuUI extends JFrame implements Runnable  {
     }
     
     /**
+     * Listener class.
+     */
+    class startButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent evnt) {
+            boolean excep;
+            JTextField field1 = new JTextField();  
+            JTextField field2 = new JTextField();  
+            JTextField field3 = new JTextField();  
+            JTextField field4 = new JTextField();  
+            JTextField field5 = new JTextField();  
+            Object[] message = {
+                "RULES",
+                "Board width:", field1,  
+                "Board height:", field2,  
+                "M-in-row:", field3,  
+                "Time for white player:", field4,  
+                "Time for nigger:", field5,  
+            };  
+            //class startPopUp 
+            do {
+                excep = false;
+                int option = JOptionPane.showConfirmDialog(new JPanel(), message, "Star Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);  
+            
+                if (option == JOptionPane.OK_OPTION) {
+                    try {
+                        int boardWidth = Integer.parseInt(field1.getText()); 
+                        int boardHeight = Integer.parseInt(field2.getText());  
+                        int mInRow = Integer.parseInt(field3.getText());  
+                        double timeWhite = Double.parseDouble(field4.getText());  
+                        double timeBlack = Double.parseDouble(field5.getText());  
+                        if  (boardWidth > 19 || boardHeight > 19) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Board's maximal size is 19x19!", "Wrong board size!", JOptionPane.PLAIN_MESSAGE);
+                       }
+                    }   catch (NumberFormatException exception) {
+                            excep = true;
+                            JOptionPane.showMessageDialog(new JPanel(), "Not all fields are right numbers!", "Wrong input!", JOptionPane.PLAIN_MESSAGE);
+                         }
+                   }
+               } while (excep);
+                startButton.setText("Pause");
+         }
+     }
+      
+    
+    
+    
+    /**
      * Thread
      */
     @Override
     public void run() {
-       // throw new UnsupportedOperationException("Not supported yet.");
         GomokuUI gomoku = new GomokuUI();
         gomoku.setVisible(true);
     }

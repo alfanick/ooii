@@ -117,6 +117,7 @@ public class Game implements Runnable {
                     Thread.sleep(Math.round(this.playersTime[this.currentPlayer] * 1000));
                     System.out.println("Time out!");
                 } catch (InterruptedException ex) {
+                    System.out.println("Finished earlier.");
                     // This shouldn't happen
                 } finally {
                     // Time has passed
