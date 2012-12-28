@@ -68,7 +68,7 @@ public class GomokuUIBoard extends JComponent {
      * It checks vertival and horizontal intersections numbers and establishes left and top margin.
      */
     private void getIntersections() {
-        GameRules rules = new GameRules(new Rectangle(0, 0, 19, 19), new Rectangle(3, 3, 5, 5), 5);
+        GameRules rules = new GameRules(new Rectangle(0, 0, 5, 5), new Rectangle(3, 3, 5, 5), 5);
         Rectangle board;
         board = rules.getSizeRectangle();
         vIntersectionsNumber = board.height;

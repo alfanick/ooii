@@ -28,6 +28,11 @@ public class GomokuUI extends JFrame implements Runnable  {
       * Vertical size
       */
      static final int V_SIZE = 900;
+     
+     
+     static final int LEFT_MARGIN = 50;
+     
+     static final int TOP_MARGIN = 100;
 
     /**
      * Header (or it can be changed for img)
@@ -96,11 +101,15 @@ public class GomokuUI extends JFrame implements Runnable  {
         setResizable(false);
         
         String[] players = {
-	"Human 1", "Human 2", 
+	"Human",
         "Bot 1", "Bot 2", 
 	"Bot 3", "Bot 4",
         "Bot 5", "Bot 6"
         };
+        
+        Font smallFont = new Font("Verdana", Font.BOLD, 18);
+        Font mediumFont = new Font("Verdana", Font.BOLD, 24);
+        Font headerFont = new Font("Georgia", Font.BOLD, 32);
         
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -110,59 +119,60 @@ public class GomokuUI extends JFrame implements Runnable  {
         JPanel player2Panel = new JPanel();
         
         gomokuHeader = new JLabel("GOMOKU", JLabel.CENTER);
-        gomokuHeader.setFont(new Font("Verdana", Font.BOLD, 32));
-        gomokuHeader.setBounds(50, 100, 200, 100);
+        gomokuHeader.setFont(headerFont);
+        gomokuHeader.setBounds(LEFT_MARGIN/2, TOP_MARGIN, 200, 100);
         
-        player1 = new JLabel("Player 1", JLabel.CENTER);
-        player1.setFont(new Font("Verdana", Font.BOLD, 18));
-        player1.setForeground(Color.white);
-        player1Panel.setBackground(Color.black);
+        player1 = new JLabel("White", JLabel.CENTER);
+        player1.setFont(smallFont);
+        player1.setForeground(Color.black);
+        player1Panel.setBackground(Color.white);
         player1Panel.add(player1);
-        player1.setBounds(80, 300, 140, 50);
-        player1Panel.setBounds(80, 300, 140, 50);
+        player1.setBounds(LEFT_MARGIN, TOP_MARGIN + 200, 140, 50);
+        player1Panel.setBounds(LEFT_MARGIN, TOP_MARGIN + 200, 140, 90);
         
-        player2 = new JLabel("Player 2", JLabel.CENTER);
-        player2.setFont(new Font("Verdana", Font.BOLD, 18));
-        player2Panel.setBackground(Color.white);
+        player2 = new JLabel("Black", JLabel.CENTER);
+        player2.setFont(smallFont);
+        player2.setForeground(Color.white);
+        player2Panel.setBackground(Color.black);
         player2Panel.add(player2);
-        player2.setBounds(80, 380, 140, 50);
-        player2Panel.setBounds(80, 380, 140, 50);
+        player2.setBounds(LEFT_MARGIN, TOP_MARGIN + 280, 140, 50);
+        player2Panel.setBounds(LEFT_MARGIN, TOP_MARGIN + 280, 140, 90);
         
         combobox1 = new JComboBox(players);
-        combobox1.setSelectedIndex(-1);
-        combobox1.setBounds(80, 350 , 140, 30);
+        combobox1.setSelectedIndex(0);
+        combobox1.setBounds(LEFT_MARGIN, TOP_MARGIN + 250 , 140, 30);
         
         combobox2 = new JComboBox(players);
-        combobox2.setSelectedIndex(-1);
-        combobox2.setBounds(80, 430 , 140, 30);
+        combobox2.setSelectedIndex(0);
+        combobox2.setBounds(LEFT_MARGIN, TOP_MARGIN + 330 , 140, 30);
         
         progressbar = new JProgressBar();
-        progressbar.setBounds(80, 570 , 140, 30);
+        progressbar.setBounds(LEFT_MARGIN, TOP_MARGIN + 470 , 140, 30);
         
         startButton = new JButton("Start");
-        startButton.setBounds(80, 620, 140, 50);
+        startButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 520, 140, 50);
         startButton.addActionListener(new startButtonListener());
         
         stopButton = new JButton("Stop");
-        stopButton.setBounds(80, 690, 140, 50);
+        stopButton.setBounds(LEFT_MARGIN + 100, TOP_MARGIN + 590, 40, 50);
         
         pauseButton = new JButton("Pause");
-        pauseButton.setBounds(80, 760, 140, 50);
+        pauseButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 590, 100, 50);
         
         timeLabel = new JLabel("Time", JLabel.CENTER);
-        timeLabel.setFont(new Font("Verdana", Font.BOLD, 24));
-        timeLabel.setBounds(80, 520, 140, 50);
+        timeLabel.setFont(mediumFont);
+        timeLabel.setBounds(LEFT_MARGIN, TOP_MARGIN + 420, 140, 50);
         
         gomokuUIBoard = new GomokuUIBoard();
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
         panel.add(gomokuHeader);
+        panel.add(combobox1);
+        panel.add(combobox2);
         panel.add(player1);
         panel.add(player1Panel);
         panel.add(player2);
         panel.add(player2Panel);
-        panel.add(combobox1);
-        panel.add(combobox2);
         panel.add(progressbar);
         panel.add(startButton);
         panel.add(stopButton);
