@@ -216,6 +216,7 @@ public class GomokuUI extends JFrame implements Runnable  {
         
         stopButton = new JButton("Stop");
         stopButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 580, 90, 40);
+        stopButton.addActionListener(new stopButtonListener());
         
         //pauseButton = new JButton("Pause");
         //pauseButton.setBounds(LEFT_MARGIN, TOP_MARGIN + 590, 100, 50);
@@ -236,6 +237,7 @@ public class GomokuUI extends JFrame implements Runnable  {
         gomokuUIBoard.createIntersections(rules.getSizeRectangle());
         gomokuUIBoard.setBounds(300, 0, 900, 900);
         
+        
         panel.add(gomokuHeader);
         panel.add(combobox1);
         panel.add(combobox2);
@@ -251,9 +253,25 @@ public class GomokuUI extends JFrame implements Runnable  {
         panel.add(timeLabel);
         panel.add(historyLabel);
         panel.add(gomokuUIBoard);
-              
+        
         //setVisible(true);
         //show();
+    }
+    
+    public void endGameMess() {
+        JOptionPane.showMessageDialog(new JPanel(),"Gratuluję, wygrałeś!", "Koniec gry", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(new JPanel(),"Niestety przegrałeś, spróbuj jeszcze raz.", "Koniec gry", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(new JPanel(),"Tym razem zremisowałeś.", "Koniec gry", JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    /**
+    * Listener class.
+    */
+    class stopButtonListener implements ActionListener {
+        //@Override
+        public void actionPerformed(ActionEvent evnt) {
+            JOptionPane.showMessageDialog(new JPanel(),"Stop");
+        }
     }
     
     /**
