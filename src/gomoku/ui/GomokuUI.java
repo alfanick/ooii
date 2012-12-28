@@ -346,7 +346,7 @@ public class GomokuUI extends JFrame implements Runnable  {
         
         if (name.equals("Human")) {
             player = new HumanPlayer();
-        } if (name.equals("TestPlayer")) {
+        } else if (name.equals("TestPlayer")) {
             player = new TestPlayer();
         } else {
             try {

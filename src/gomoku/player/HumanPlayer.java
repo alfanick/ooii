@@ -33,8 +33,7 @@ public final class HumanPlayer implements PlayerInterface {
      */
     public HumanPlayer() {
         System.out.println("Human player created!");
-        point.x = 0;
-        point.y = 0;
+        point = new Point(0,0);
     }
 
     @Override
