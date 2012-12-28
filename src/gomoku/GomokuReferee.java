@@ -86,13 +86,14 @@ public class GomokuReferee {
                 
                 //checking if it is first move
                 if(history.empty()){
-                    previousBoard.clean();
+                    previousBoard.cleanWithForbidden(rules.getFirstMoveRectangle());
+                    Gomoku.game.board.cleanWithForbidden(rules.getFirstMoveRectangle());
                 }
                 
                 //state of a field depends on which of players takes turn
                 previousBoard.set(position, GomokuBoardState.values()[player]);
                 
-                history.push(position);
+                history.push((Point) position.clone());
                 
                 //previousBoard.print("PO RUCHU (S)");
                 //checking if one of players won
@@ -129,6 +130,7 @@ public class GomokuReferee {
                 
                 previousBoard.set(p, GomokuBoardState.EMPTY);
                 Gomoku.game.board.set(p, GomokuBoardState.EMPTY);
+                
             
             }else{
                 previousBoard.cleanWithForbidden(rules.getFirstMoveRectangle());
@@ -136,6 +138,8 @@ public class GomokuReferee {
                 break;
             }                
         }
+        
+        Gomoku.ui.repaint();
     }
     
     /**

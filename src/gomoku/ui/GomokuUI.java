@@ -194,14 +194,14 @@ public class GomokuUI extends JFrame implements Runnable  {
                     
                     repaint();
                     
-                    System.out.println(historyModel.elementAt(index));
-                    
                     if (index > 0) {
                         historyModel.removeRange(0, index-1);
                     } else {
                         historyModel.removeElementAt(0);
                     }
                     list.clearSelection();
+                    
+                    Gomoku.gameThread.start();
                 }
             }
         });
@@ -365,8 +365,8 @@ public class GomokuUI extends JFrame implements Runnable  {
                 gomokuUIBoard.createIntersections(rules.getSizeRectangle());
                 stopTicking();
                 Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
-                refresh();
-                //    gomokuUIBoard.repaint();
+                //refresh();
+                gomokuUIBoard.repaint();
                 
                 Gomoku.gameThread = new Thread(Gomoku.game);
         
