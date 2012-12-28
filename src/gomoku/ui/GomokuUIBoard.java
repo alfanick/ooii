@@ -1,6 +1,7 @@
 package gomoku.ui;
 
 import gomoku.*;
+import java.awt.Point;
 import gomoku.GameRules;
 import gomoku.GomokuBoard;
 import java.awt.Component;
@@ -52,6 +53,11 @@ public class GomokuUIBoard extends JComponent {
     int leftMargin;
     
     /**
+     * Mouse pressing indicator - 1 for true, 0 for false
+     */
+    int mousePressed;
+    
+    /**
      * Top margin size
      */
     int topMargin;
@@ -66,8 +72,8 @@ public class GomokuUIBoard extends JComponent {
      */
     int hIntersectionsNumber;
     
-    int mousePositionX;
-    int mousePositionY;
+    public int mousePositionX;
+    public int mousePositionY;
     
   
     
@@ -119,10 +125,20 @@ public class GomokuUIBoard extends JComponent {
             g.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
         }
         
+        System.out.print("x = "+mousePositionX);
+        System.out.println("y = "+mousePositionY);
+        
         if(mousePositionX != -1 && mousePositionY != -1) {
-            g.setColor(Color.pink);
-            g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionY + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionX+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
-        }  else {
+            switch (mousePressed) {
+                case 1:
+                    drawCircle(g);
+                    break;
+                case 0:
+                    g.setColor(Color.pink);
+                    g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                     break;
+            }
+         }  else {
             
         }
 
@@ -151,6 +167,21 @@ public class GomokuUIBoard extends JComponent {
         }
     }
     
+    public void drawCircle(Graphics g) {
+    /*    switch(gracz){
+            case A:
+                g.setColor(white);
+                g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionY + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionX+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                break;
+            case B:
+                g.setColor(black);
+                g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionY + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionX+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                break;
+        }*/
+            g.setColor(Color.red);
+            g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+    }
+    
      public class pieceAreaListener implements MouseListener {
         //where initialization occurs:
         //Register for mouse events on blankArea and the panel.
@@ -168,17 +199,21 @@ public class GomokuUIBoard extends JComponent {
         }
         
         public void mousePressed(MouseEvent e) {
-            
+            mousePressed = 1;
+            repaint();
         }
         
         public void mouseReleased(MouseEvent e) {
-            
+            mousePressed = 0;
         }
      }
      
-     class MyMouseMotionListener implements MouseMotionListener  {
+     
+     
+     public class MyMouseMotionListener implements MouseMotionListener  {
+         int x, y;
           public void mouseDragged(MouseEvent e) {
-            showMousePos(e);
+        
           }
 
           public void mouseMoved(MouseEvent e) {
@@ -186,53 +221,70 @@ public class GomokuUIBoard extends JComponent {
           }
 
           private void showMousePos(MouseEvent e) {
-      //      JLabel src = (JLabel)e.getComponent();
-            PointerInfo pointerInfo = MouseInfo.getPointerInfo();
-            Point point = pointerInfo.getLocation();
-          //  src.setText(point.toString());
+             Point coordinates = new Point(getX(), getY());
+             coordinatesCalculator(coordinates);
+             int pixelX = e.getX();
+             int pixelY = e.getY();
+             int testX = Math.round((pixelX - leftMargin - CIRCLESIZE/6*5)/INTERSPACE);
+             int testY = Math.round((pixelY - topMargin - CIRCLESIZE/6*5)/INTERSPACE);
+             System.out.print("testx = "+testX);
+                        System.out.println(" testy = "+testY);
             for (int i = 0; i < vIntersectionsNumber; i++) {
                 for (int j = 0; j < hIntersectionsNumber; j++) {
-                if (point.x >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
-                        point.x <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) && 
-                        point.y >= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
-                        point.y <= ((topMargin - CIRCLESIZE/2) + (j+ 1)*INTERSPACE + CIRCLESIZE)) {
-                    highlightPiece(point.x, point.y);
-                }   else {
-                    mousePositionX = -1;
-                    mousePositionY = -1;
-                }
+                if (pixelX >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
+                        pixelX <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) && 
+                        pixelY >= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
+                        pixelY <= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE + CIRCLESIZE)) {
+                       x = i;
+                        y = j;
+                         
+                   //     System.out.print("x = "+x);
+                    //    System.out.println(" y = "+y);
+ //                   highlightPiece(point.x, point.y);
+                }/*   else if (pixelX < ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
+                        pixelX > ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) || 
+                        pixelY < ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
+                        pixelY > ((topMargin - CIRCLESIZE/2) + (j+ 1)*INTERSPACE + CIRCLESIZE)) {
+                    x = -1;
+                    y = -1;
+                    
+                }*/
              }
            }
+            if(y != mousePositionY || x != mousePositionX){
+                mousePositionX = x;
+                mousePositionY = y;
+                mousePressed = 0;
+                System.out.print("x = "+x);
+                        System.out.println(" y = "+y);
+                System.out.print("mousePositionX = "+mousePositionX);
+                System.out.println(" mousePositionY = "+mousePositionY);
+                repaint();
+            }
+          }
+          private Point coordinatesCalculator (Point p) {
+              for (int i = 0; i < vIntersectionsNumber; i++) {
+                  for (int j = 0; j < hIntersectionsNumber; j++) {
+                     if (p.x >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
+                        p.x <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) && 
+                        p.y >= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
+                        p.y <= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE + CIRCLESIZE)) {
+                       p.x = i;
+                       p.y = j;
+                       System.out.print("pX = "+p.x);
+                       System.out.println(" pY = "+p.y);
+                       return p;
+                     } 
+                     }
+                  }
+             // p.x = -1;
+              //p.y = -1;
+                     System.out.print("pX = "+p.x);
+                System.out.println(" pY = "+p.y);
+              return p;
           }
      }
-          
-          public void highlightPiece(int x, int y) {
-              mousePositionX = x;
-              mousePositionY = y;
-        //      Graphics2D g = new Graphics();
-//g.setColor(Color.pink);
-  //            g.fillOval((leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
-          }
-          
-  /*  public class pieceArea extends JLabel {
-        int x, y;
-        final int startXInPixel = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
-        final int startYInPixel = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
-      // final int width = CIRCLESIZE;
-        //final int height = CIRCLESIZE;
-      /*  final int leftPx = (leftMargin - CIRCLESIZE/2) + (y + 1)*INTERSPACE;
-        final int rightPx = (leftMargin + CIRCLESIZE/2) + (y + 1)*INTERSPACE ;
-        final int topPx = (topMargin - CIRCLESIZE/2) + (x + 1)*INTERSPACE;
-        final int bottomPx =(topMargin + CIRCLESIZE/2) + (x + 1)*INTERSPACE;
-*/
-    /*    public pieceArea(int x, int y) {
-            setOpaque(true);
-            setBounds(startXInPixel, startYInPixel, CIRCLESIZE, CIRCLESIZE);
-            addMouseListener(new pieceAreaListener());
-            setVisible(false);
-        }
-    }
-    */
+  
     
             
        
