@@ -1,6 +1,8 @@
 package gomoku.ui;
 
 import gomoku.*;
+import gomoku.player.HumanPlayer;
+import gomoku.player.PlayerInterface;
 import gomoku.player.TestPlayer;
 import javax.swing.*;
 import java.awt.BorderLayout;
@@ -12,8 +14,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //import java.awt.*;
 
 /**
@@ -124,12 +134,18 @@ public class GomokuUI extends JFrame implements Runnable  {
         //resize(H_SIZE,V_SIZE);
         setResizable(false);
         
-        String[] players = {
-            "Human",
-            "Bot 1", "Bot 2", 
-            "Bot 3", "Bot 4",
-            "Bot 5", "Bot 6"
-        };
+        List<String> players = new ArrayList<>();
+        players.add("Human");
+        players.add("TestPlayer");
+        
+        
+        File files = new File(".", "bots");
+        for (String filename : files.list()) {
+            System.out.println(filename);
+            
+            players.add(filename.replaceAll(".jar", ""));
+        }
+        
         
         /**
          * Zapis historii ruchow graczy/botow 
@@ -169,11 +185,11 @@ public class GomokuUI extends JFrame implements Runnable  {
         player2.setBounds(LEFT_MARGIN, TOP_MARGIN + 280, 140, 50);
         player2Panel.setBounds(LEFT_MARGIN, TOP_MARGIN + 280, 140, 90);
         
-        combobox1 = new JComboBox(players);
+        combobox1 = new JComboBox(players.toArray());
         combobox1.setSelectedIndex(0);
         combobox1.setBounds(LEFT_MARGIN, TOP_MARGIN + 250 , 140, 30);
         
-        combobox2 = new JComboBox(players);
+        combobox2 = new JComboBox(players.toArray());
         combobox2.setSelectedIndex(0);
         combobox2.setBounds(LEFT_MARGIN, TOP_MARGIN + 330 , 140, 30);
         
@@ -325,6 +341,35 @@ public class GomokuUI extends JFrame implements Runnable  {
         }
     }
     
+    private PlayerInterface createPlayer(String name) {
+        PlayerInterface player = null;
+        
+        if (name.equals("Human")) {
+            player = new HumanPlayer();
+        } if (name.equals("TestPlayer")) {
+            player = new TestPlayer();
+        } else {
+            try {
+                StringBuilder fname = new StringBuilder();
+                
+                fname.append(name).append(".jar");
+                File botFile = new File("bots", fname.toString());
+
+                URLClassLoader botLoader = new URLClassLoader(new URL[] { botFile.toURI().toURL() });
+                Class botClass = botLoader.loadClass("gomoku.player.Bot");
+                player = (PlayerInterface) botClass.newInstance();
+            } catch (InstantiationException ex) {
+                Logger.getLogger(GomokuUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(GomokuUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MalformedURLException | ClassNotFoundException ex) {
+                Logger.getLogger(GomokuUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }   
+                    
+        return player;
+    }
+    
     /**
      * Listener class.
      */
@@ -423,7 +468,12 @@ public class GomokuUI extends JFrame implements Runnable  {
 
                     gomokuUIBoard.createIntersections(rules.getSizeRectangle());
                     stopTicking();
-                    Gomoku.game = new Game(new TestPlayer(), timeWhite, new TestPlayer(), timeBlack, rules);
+                    
+                    PlayerInterface whitePlayer = createPlayer((String) combobox1.getSelectedItem());
+                    PlayerInterface blackPlayer = createPlayer((String) combobox2.getSelectedItem());
+                    
+                    Gomoku.game = new Game(whitePlayer, timeWhite, blackPlayer, timeBlack, rules);
+     
                     //refresh();
                     gomokuUIBoard.repaint();
 

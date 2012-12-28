@@ -113,6 +113,32 @@ public class Game implements Runnable {
     }
     
     /**
+     * Lock for player turn
+     */
+    private final Object playerLock = new Object();
+    
+    /**
+     * Let player think for given time
+     * 
+     * @param time Time of lock
+     * @throws InterruptedException When player stops thinking 
+     */
+    private void delayPlayer(float time) throws InterruptedException {
+        synchronized (playerLock) {
+            playerLock.wait(Math.round(this.playersTime[this.currentPlayer] * 1000));
+        }
+    }
+    
+    /**
+     * Should be called when player stops thinking
+     */
+    public void playerDone() {
+        synchronized (playerLock) {
+            playerLock.notifyAll();
+        }
+    }
+    
+    /**
      * Creates Game thread - ask players for move, maintain their times,
      * asks referee for acceptance, makes the move and alters players.
      */
@@ -151,9 +177,9 @@ public class Game implements Runnable {
 
                     try {
                         Gomoku.ui.startTicking(this.playersTime[this.currentPlayer]);
-
+                        
                         // Let player thinks for given time 
-                        Thread.sleep(Math.round(this.playersTime[this.currentPlayer] * 1000));
+                        this.delayPlayer(this.playersTime[this.currentPlayer]);
                         //System.out.println("Time out!");
                     } catch (InterruptedException ex) {
                         //System.out.println("Finished earlier.");

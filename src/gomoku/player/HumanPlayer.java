@@ -24,7 +24,7 @@ public final class HumanPlayer implements PlayerInterface {
      */
     public void clickedAt(Point p){
         point = p;
-        Gomoku.gameThread.interrupt();
+        Gomoku.game.playerDone();
     }
     
     /**

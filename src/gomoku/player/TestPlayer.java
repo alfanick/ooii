@@ -58,6 +58,7 @@ public final class TestPlayer implements PlayerInterface {
             } while (board.get(this.position) != GomokuBoardState.EMPTY);
             
             //Gomoku.gameThread.interrupt();
+            //Gomoku.game.playerDone();
         }
     }
 
