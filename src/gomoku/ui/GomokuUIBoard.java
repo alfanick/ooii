@@ -200,7 +200,8 @@ public class GomokuUIBoard extends JComponent {
         
         public void mousePressed(MouseEvent e) {
             mousePressed = 1;
-            repaint();
+            if (mousePositionX != -1 && mousePositionY != -1)
+                 repaint();
         }
         
         public void mouseReleased(MouseEvent e) {
@@ -211,7 +212,6 @@ public class GomokuUIBoard extends JComponent {
      
      
      public class MyMouseMotionListener implements MouseMotionListener  {
-         int x, y;
           public void mouseDragged(MouseEvent e) {
         
           }
@@ -221,7 +221,7 @@ public class GomokuUIBoard extends JComponent {
           }
 
           private void showMousePos(MouseEvent e) {
-             Point coordinates = new Point(getX(), getY());
+            Point coordinates = new Point(e.getX(), e.getY());
              coordinatesCalculator(coordinates);
              if(coordinates.x != mousePositionX || coordinates.y != mousePositionY) {
                  mousePositionX = coordinates.x;
@@ -229,45 +229,7 @@ public class GomokuUIBoard extends JComponent {
                  repaint();
              }
           }
-                 
-            // int pixelX = e.getX();
-             //int pixelY = e.getY();
-            // int testX = Math.round((pixelX - leftMargin - CIRCLESIZE/6*5)/INTERSPACE);
-            // int testY = Math.round((pixelY - topMargin - CIRCLESIZE/6*5)/INTERSPACE);
-           //  System.out.print("testx = "+testX);
-            //            System.out.println(" testy = "+testY);
-       /*     for (int i = 0; i < vIntersectionsNumber; i++) {
-                for (int j = 0; j < hIntersectionsNumber; j++) {
-                if (pixelX >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
-                        pixelX <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) && 
-                        pixelY >= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
-                        pixelY <= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE + CIRCLESIZE)) {
-                       x = i;
-                        y = j;*/
-                         
-                   //     System.out.print("x = "+x);
-                    //    System.out.println(" y = "+y);
- //                   highlightPiece(point.x, point.y);
-                /*   else if (pixelX < ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
-                        pixelX > ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) || 
-                        pixelY < ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
-                        pixelY > ((topMargin - CIRCLESIZE/2) + (j+ 1)*INTERSPACE + CIRCLESIZE)) {
-                    x = -1;
-                    y = -1;
-                  */  
-             /*   }
-}
-}
-}
-            if(y != mousePositionY || x != mousePositionX){
                 
-                System.out.print("x = "+x);
-                        System.out.println(" y = "+y);
-                System.out.print("mousePositionX = "+mousePositionX);
-                System.out.println(" mousePositionY = "+mousePositionY);
-                repaint();
-            }
-          }*/
           private Point coordinatesCalculator (Point p) {
               Point temp = new Point(p);
               p.x = -1;
@@ -284,8 +246,8 @@ public class GomokuUIBoard extends JComponent {
                         p.y = i;
                    }
                }
-               System.out.print("pX = "+p.x);
-               System.out.println(" pY = "+p.y);
+         //      System.out.print("pX = "+p.x);
+           //    System.out.println(" pY = "+p.y);
                return p;
           }
      }
