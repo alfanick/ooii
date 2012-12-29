@@ -149,6 +149,10 @@ public class Game implements Runnable {
         }
     }
     
+    public int getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+    
     /**
      * Creates Game thread - ask players for move, maintain their times,
      * asks referee for acceptance, makes the move and alters players.
