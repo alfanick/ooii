@@ -129,17 +129,7 @@ public class GomokuUIBoard extends JComponent {
         System.out.println("y = "+mousePositionY);
         
         if(mousePositionX != -1 && mousePositionY != -1) {
-            switch (mousePressed) {
-                case 1:
-                    drawCircle(g);
-                    break;
-                case 0:
-                    g.setColor(Color.pink);
-                    g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
-                     break;
-            }
-         }  else {
-            
+            drawCircle(g);
         }
 
         try{
@@ -178,9 +168,19 @@ public class GomokuUIBoard extends JComponent {
                 g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionY + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionX+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
                 break;
         }*/
-            g.setColor(Color.red);
-            g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+        
+            switch (mousePressed) {
+                case 1:
+                    g.setColor(Color.red);
+                    g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                    break;
+                case 0:
+                    g.setColor(Color.pink);
+                    g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                    break;
+        }
     }
+           
     
      public class pieceAreaListener implements MouseListener {
         //where initialization occurs:
