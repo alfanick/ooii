@@ -2,6 +2,8 @@ package gomoku;
 
 import gomoku.exceptions.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -96,8 +98,9 @@ public class GomokuReferee {
                 
                 //previousBoard.print("PO RUCHU (S)");
                 //checking if one of players won
-                if(puttedMInRow(position, rules.getInRowToWin(), player)){
-                    throw new GameEndedException(position);
+                ArrayList<Point> tempListOfPoints = puttedMInRow(position, rules.getInRowToWin(), player);
+                if(!tempListOfPoints.isEmpty()){
+                    throw new GameEndedException(position, tempListOfPoints);
                 }
                 return true;
             }
@@ -169,15 +172,19 @@ public class GomokuReferee {
      * @param player    player that did last move
      * @return          true if there is M powns in a row, false otherwise
      */
-    private boolean puttedMInRow(Point position, int inRow, int player){
+    private ArrayList<Point> puttedMInRow(Point position, int inRow, int player){
                
         int[][] count = {{0,0,0},{0,0,0},{0,0,0}}; 
         int i;
+        ArrayList<Point>[] mInRowList = (ArrayList<Point>[]) new ArrayList[4];
+        for(i=0; i<4; i++)
+            mInRowList[i] = new ArrayList<Point>();
         
         for(i=1; i<=inRow; i++){
             if(position.y-i>=0){
                 if(Gomoku.game.board.get(new Point(position.x,position.y-i)).ordinal() == player){
                     count[0][1]++;
+                    mInRowList[0].add(new Point(position.x, position.y-i));
                 }else{
                     break;
                 }
@@ -188,6 +195,7 @@ public class GomokuReferee {
             if(position.y+i < rules.getSizeRectangle().height){
                 if(Gomoku.game.board.get(new Point(position.x,position.y+i)).ordinal() == player){
                     count[2][1]++;
+                    mInRowList[0].add(new Point(position.x, position.y+i));
                 }else{
                     break;
                 }
@@ -198,6 +206,7 @@ public class GomokuReferee {
             if(position.x-i >= 0){
                 if(Gomoku.game.board.get(new Point(position.x-i,position.y)).ordinal() == player){
                     count[1][0]++;
+                    mInRowList[1].add(new Point(position.x-i, position.y));
                 }else{
                     break;
                 }
@@ -208,6 +217,7 @@ public class GomokuReferee {
             if(position.x+i < rules.getSizeRectangle().width){
                 if(Gomoku.game.board.get(new Point(position.x+i,position.y)).ordinal() == player){
                     count[1][0]++;
+                    mInRowList[1].add(new Point(position.x+i, position.y));
                 }else{
                     break;
                 }
@@ -218,6 +228,7 @@ public class GomokuReferee {
             if((position.y-i >= 0) && (position.x-i >= 0)){
                 if(Gomoku.game.board.get(new Point(position.x-i,position.y-i)).ordinal() == player){
                     count[0][0]++;
+                    mInRowList[2].add(new Point(position.x-i, position.y-i));
                 }else{
                     break;
                 }
@@ -228,6 +239,7 @@ public class GomokuReferee {
             if((position.y+i < rules.getSizeRectangle().height) && (position.x+i < rules.getSizeRectangle().width)){
                 if(Gomoku.game.board.get(new Point(position.x+i,position.y+i)).ordinal() == player){
                     count[2][2]++;
+                    mInRowList[2].add(new Point(position.x+i, position.y+i));
                 }else{
                     break;
                 }
@@ -238,6 +250,7 @@ public class GomokuReferee {
             if((position.y-i >= 0) && (position.x+i < rules.getSizeRectangle().width)){
                 if(Gomoku.game.board.get(new Point(position.x+i,position.y-i)).ordinal() == player){
                     count[0][2]++;
+                    mInRowList[3].add(new Point(position.x+i, position.y-i));
                 }else{
                     break;
                 }
@@ -248,20 +261,23 @@ public class GomokuReferee {
             if((position.y+i < rules.getSizeRectangle().height) && (position.x-i >= 0)){
                 if(Gomoku.game.board.get(new Point(position.x-i,position.y+i)).ordinal() == player){
                     count[2][0]++;
+                    mInRowList[3].add(new Point(position.x-i, position.y+i));
                 }else{
                     break;
                 }
             }else{break;}
         }
         
-        if((count[0][0] + count[2][2] + 1 >= inRow) ||
-           (count[0][1] + count[2][1] + 1 >= inRow) ||
-           (count[0][2] + count[2][0] + 1 >= inRow) ||
-           (count[1][0] + count[1][2] + 1 >= inRow)){
-            
-            return true; 
+        if(count[0][0] + count[2][2] + 1 >= inRow){
+            return mInRowList[2];
+        }else if (count[0][1] + count[2][1] + 1 >= inRow){
+            return mInRowList[0];
+        }else if(count[0][2] + count[2][0] + 1 >= inRow){
+            return mInRowList[3];
+        }else if (count[1][0] + count[1][2] + 1 >= inRow){
+            return mInRowList[1];
+        }else{
+            return new ArrayList<Point>();
         }
-        
-        return false;
     }
 }

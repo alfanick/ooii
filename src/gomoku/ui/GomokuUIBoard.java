@@ -134,6 +134,9 @@ public class GomokuUIBoard extends JComponent {
                             case FORBIDDEN:
                                 g.setColor(Color.lightGray);
                                 break;
+                            case WINNING:
+                                g.setColor(Color.red);
+                                break;
                             default:
                                 continue;
                         }

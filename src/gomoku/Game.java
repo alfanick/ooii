@@ -288,6 +288,10 @@ public class Game implements Runnable {
             //System.out.printf("Koniec gry (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
 
             this.board.set(ex.getPosition(), GomokuBoardState.values()[(this.currentPlayer+1)%2]);
+            for( Point p : ex.getPoints()){
+                this.board.set(p, GomokuBoardState.WINNING);
+            }
+            
             Gomoku.ui.refresh();
                 
             //this.board.print("KONIEC");
