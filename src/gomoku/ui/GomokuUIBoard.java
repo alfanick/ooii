@@ -223,68 +223,72 @@ public class GomokuUIBoard extends JComponent {
           private void showMousePos(MouseEvent e) {
              Point coordinates = new Point(getX(), getY());
              coordinatesCalculator(coordinates);
-             int pixelX = e.getX();
-             int pixelY = e.getY();
-             int testX = Math.round((pixelX - leftMargin - CIRCLESIZE/6*5)/INTERSPACE);
-             int testY = Math.round((pixelY - topMargin - CIRCLESIZE/6*5)/INTERSPACE);
-             System.out.print("testx = "+testX);
-                        System.out.println(" testy = "+testY);
-            for (int i = 0; i < vIntersectionsNumber; i++) {
+             if(coordinates.x != mousePositionX || coordinates.y != mousePositionY) {
+                 mousePositionX = coordinates.x;
+                 mousePositionY = coordinates.y;
+                 repaint();
+             }
+          }
+                 
+            // int pixelX = e.getX();
+             //int pixelY = e.getY();
+            // int testX = Math.round((pixelX - leftMargin - CIRCLESIZE/6*5)/INTERSPACE);
+            // int testY = Math.round((pixelY - topMargin - CIRCLESIZE/6*5)/INTERSPACE);
+           //  System.out.print("testx = "+testX);
+            //            System.out.println(" testy = "+testY);
+       /*     for (int i = 0; i < vIntersectionsNumber; i++) {
                 for (int j = 0; j < hIntersectionsNumber; j++) {
                 if (pixelX >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
                         pixelX <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) && 
                         pixelY >= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
                         pixelY <= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE + CIRCLESIZE)) {
                        x = i;
-                        y = j;
+                        y = j;*/
                          
                    //     System.out.print("x = "+x);
                     //    System.out.println(" y = "+y);
  //                   highlightPiece(point.x, point.y);
-                }/*   else if (pixelX < ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
+                /*   else if (pixelX < ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
                         pixelX > ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) || 
                         pixelY < ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
                         pixelY > ((topMargin - CIRCLESIZE/2) + (j+ 1)*INTERSPACE + CIRCLESIZE)) {
                     x = -1;
                     y = -1;
-                    
-                }*/
-             }
-           }
+                  */  
+             /*   }
+}
+}
+}
             if(y != mousePositionY || x != mousePositionX){
-                mousePositionX = x;
-                mousePositionY = y;
-                mousePressed = 0;
+                
                 System.out.print("x = "+x);
                         System.out.println(" y = "+y);
                 System.out.print("mousePositionX = "+mousePositionX);
                 System.out.println(" mousePositionY = "+mousePositionY);
                 repaint();
             }
-          }
+          }*/
           private Point coordinatesCalculator (Point p) {
+              Point temp = new Point(p);
+              p.x = -1;
+              p.y = -1;
               for (int i = 0; i < vIntersectionsNumber; i++) {
-                  for (int j = 0; j < hIntersectionsNumber; j++) {
-                     if (p.x >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
-                        p.x <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE) && 
-                        p.y >= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE) &&
-                        p.y <= ((topMargin - CIRCLESIZE/2) + (j + 1)*INTERSPACE + CIRCLESIZE)) {
-                       p.x = i;
-                       p.y = j;
-                       System.out.print("pX = "+p.x);
-                       System.out.println(" pY = "+p.y);
-                       return p;
-                     } 
-                     }
-                  }
-             // p.x = -1;
-              //p.y = -1;
-                     System.out.print("pX = "+p.x);
-                System.out.println(" pY = "+p.y);
-              return p;
+                   if (temp.x >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
+                        temp.x <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE)) {
+                        p.x = i;
+                   }
+              }
+               for (int i = 0; i < hIntersectionsNumber; i++) {
+                   if (temp.y >= ((topMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) &&
+                        temp.y <= ((topMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE)) {
+                        p.y = i;
+                   }
+               }
+               System.out.print("pX = "+p.x);
+               System.out.println(" pY = "+p.y);
+               return p;
           }
      }
-  
     
             
        
