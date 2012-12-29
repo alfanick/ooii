@@ -417,8 +417,8 @@ public class GomokuUI extends JFrame implements Runnable  {
             JTextField field9 = new JTextField("5");  
             
             if (rules != null) {
-                field1.setText(rules.getSizeRectangle().width + "");
-                field2.setText(rules.getSizeRectangle().height + "");
+                field1.setText(rules.getSizeRectangle().height + "");
+                field2.setText(rules.getSizeRectangle().width + "");
                 field3.setText(rules.getInRowToWin() + "");
             
                 if (timeWhite == -1) {
