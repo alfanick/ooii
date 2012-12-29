@@ -1,6 +1,7 @@
 package gomoku.ui;
 
 import gomoku.*;
+import java.awt.Point;
 import gomoku.GameRules;
 import gomoku.GomokuBoard;
 import java.awt.Component;
@@ -9,6 +10,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 /**
  * Component representing Gomoku board.
@@ -49,6 +53,11 @@ public class GomokuUIBoard extends JComponent {
     int leftMargin;
     
     /**
+     * Mouse pressing indicator - 1 for true, 0 for false
+     */
+    int mousePressed;
+    
+    /**
      * Top margin size
      */
     int topMargin;
@@ -58,10 +67,15 @@ public class GomokuUIBoard extends JComponent {
      */
     int vIntersectionsNumber;
     
-    /**
+     /**
      * Horizontal intersections number
      */
     int hIntersectionsNumber;
+    
+    public int mousePositionX;
+    public int mousePositionY;
+    
+  
     
     Font smallFont;
     
@@ -69,6 +83,8 @@ public class GomokuUIBoard extends JComponent {
     
     public GomokuUIBoard() {
         smallFont = new Font("Georgia", Font.BOLD, FONTSIZE);
+        addMouseMotionListener(new MyMouseMotionListener());
+        addMouseListener(new pieceAreaListener());
       //  createIntersections(new Rectangle(3,3));
     }
     
@@ -79,6 +95,7 @@ public class GomokuUIBoard extends JComponent {
      * 
      * @param board Size rectangle
      */
+    
     public final void createIntersections(Rectangle board) {
         //GameRules rules = new GameRules(new Rectangle(0, 0, 5, 5), new Rectangle(3, 3, 5, 5), 5);
         vIntersectionsNumber = board.width;
@@ -101,6 +118,7 @@ public class GomokuUIBoard extends JComponent {
         g.setFont(smallFont);
         g.setColor(Color.black);
         
+        
         for (int i = 1; i <= vIntersectionsNumber; i++) {
             g.drawString(numbers[i - 1], leftMargin - 25, topMargin + 5 + i * INTERSPACE);
             g.drawLine(leftMargin, topMargin + i * INTERSPACE, leftMargin + (hIntersectionsNumber + 1) * INTERSPACE, topMargin + i * INTERSPACE);
@@ -108,6 +126,13 @@ public class GomokuUIBoard extends JComponent {
         for (int i = 1; i <= hIntersectionsNumber; i++) {
             g.drawString(letters[i - 1], leftMargin - 5 + i * INTERSPACE, topMargin - 15);
             g.drawLine(leftMargin + i  * INTERSPACE, topMargin, leftMargin + i  * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
+        }
+        
+        System.out.print("x = "+mousePositionX);
+        System.out.println("y = "+mousePositionY);
+        
+        if(mousePositionX != -1 && mousePositionY != -1) {
+            drawCircle(g);
         }
 
         if (!paused) {
@@ -139,67 +164,111 @@ public class GomokuUIBoard extends JComponent {
             g.fillRect(0, 0, this.getSize().height, this.getSize().width);
         }
     }
-    /*
-    public class BlankArea extends JLabel {
-    int x, y;
-    final static int leftPx =;
-    final static int rightPx =;
-    final static int topPx = ;
-    final static int bottomPx =;
-
-    public BlankArea(Color color) {
-        setBackground(color);
-        setOpaque(true);
-        setBorder(BorderFactory.createLineBorder(Color.black));
-    }
-
-    public Dimension getMinimumSize() {
-        return minSize;
-    }
-
-    public Dimension getPreferredSize() {
-        return minSize;
-    }
-}
     
+    public void drawCircle(Graphics g) {
+    /*    switch(gracz){
+            case A:
+                g.setColor(white);
+                g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionY + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionX+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                break;
+            case B:
+                g.setColor(black);
+                g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionY + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionX+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                break;
+        }*/
+        
+            switch (mousePressed) {
+                case 1:
+                    g.setColor(Color.red);
+                    g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                    break;
+                case 0:
+                    g.setColor(Color.pink);
+                    g.fillOval((leftMargin - CIRCLESIZE/2) + (mousePositionX + 1)*INTERSPACE, (topMargin - CIRCLESIZE/2) + (mousePositionY+ 1)*INTERSPACE, CIRCLESIZE, CIRCLESIZE);
+                    break;
+        }
+    }
+           
     
-            
-   /*     public class MouseEventDemo ... implements MouseListener {
+     public class pieceAreaListener implements MouseListener {
         //where initialization occurs:
         //Register for mouse events on blankArea and the panel.
-        blankArea.addMouseListener(this);
-        addMouseListener(this);
+
+        public void mouseEntered(MouseEvent e) {
+            //("Mouse entered", e);
+        }
         
+        public void mouseExited(MouseEvent e) {
+            //saySomething("Mouse exited", e);
+        }
 
-    public void mousePressed(MouseEvent e) {
-       saySomething("Mouse pressed; # of clicks: "
-                    + e.getClickCount(), e);
-    }
+        public void mouseClicked(MouseEvent e) {
+            
+        }
+        
+        public void mousePressed(MouseEvent e) {
+            mousePressed = 1;
+            if (mousePositionX != -1 && mousePositionY != -1) {
+                //if (Gomoku.game.)
+                try {
+                    Gomoku.game.forceMove(new Point(mousePositionY, mousePositionX));
+                } catch (NullPointerException exc) {
+                    
+                }
+                 repaint();
+            }
+        }
+        
+        public void mouseReleased(MouseEvent e) {
+            mousePressed = 0;
+        }
+     }
+     
+     
+     
+     public class MyMouseMotionListener implements MouseMotionListener  {
+          public void mouseDragged(MouseEvent e) {
+        
+          }
 
-    public void mouseReleased(MouseEvent e) {
-       saySomething("Mouse released; # of clicks: "
-                    + e.getClickCount(), e);
-    }
+          public void mouseMoved(MouseEvent e) {
+            showMousePos(e);
+          }
 
-    public void mouseEntered(MouseEvent e) {
-       saySomething("Mouse entered", e);
-    }
-
-    public void mouseExited(MouseEvent e) {
-       saySomething("Mouse exited", e);
-    }
-
-    public void mouseClicked(MouseEvent e) {
-       saySomething("Mouse clicked (# of clicks: "
-                    + e.getClickCount() + ")", e);
-    }
-
-    void saySomething(String eventDescription, MouseEvent e) {
-        textArea.append(eventDescription + " detected on "
-                        + e.getComponent().getClass().getName()
-                        + "." + newline);
-    }
-}*/
+          private void showMousePos(MouseEvent e) {
+            Point coordinates = new Point(e.getX(), e.getY());
+             coordinatesCalculator(coordinates);
+             if(coordinates.x != mousePositionX || coordinates.y != mousePositionY) {
+                 mousePositionX = coordinates.x;
+                 mousePositionY = coordinates.y;
+                 repaint();
+             }
+          }
+                
+          private Point coordinatesCalculator (Point p) {
+              Point temp = new Point(p);
+              p.x = -1;
+              p.y = -1;
+              for (int i = 0; i < vIntersectionsNumber; i++) {
+                   if (temp.x >= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) && 
+                        temp.x <= ((leftMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE)) {
+                        p.x = i;
+                   }
+              }
+               for (int i = 0; i < hIntersectionsNumber; i++) {
+                   if (temp.y >= ((topMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE) &&
+                        temp.y <= ((topMargin - CIRCLESIZE/2) + (i + 1)*INTERSPACE + CIRCLESIZE)) {
+                        p.y = i;
+                   }
+               }
+         //      System.out.print("pX = "+p.x);
+           //    System.out.println(" pY = "+p.y);
+               return p;
+          }
+     }
+    
+            
+       
         //throw new UnsupportedOperationException("Not supported yet.");
     
 }

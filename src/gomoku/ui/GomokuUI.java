@@ -24,6 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 //import java.awt.*;
 
 /**
@@ -340,6 +341,7 @@ public class GomokuUI extends JFrame implements Runnable  {
             
         }
     }
+
     
     private PlayerInterface createPlayer(JComboBox combo) {
         PlayerInterface player = null;
@@ -494,6 +496,7 @@ public class GomokuUI extends JFrame implements Runnable  {
                          }
                    }
                } while (excep);
+            
                 if (option == JOptionPane.OK_OPTION) {
                     startButton.setText("Pause");          
                     historyModel.clear();

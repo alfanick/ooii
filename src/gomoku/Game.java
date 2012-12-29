@@ -4,6 +4,7 @@ import gomoku.exceptions.CorruptedBoardException;
 import gomoku.exceptions.DrawGameEndedException;
 import gomoku.exceptions.GameEndedException;
 import gomoku.exceptions.IllegalMoveException;
+import gomoku.player.HumanPlayer;
 import gomoku.player.PlayerInterface;
 import java.awt.Point;
 import java.util.Random;
@@ -135,6 +136,16 @@ public class Game implements Runnable {
     public void playerDone() {
         synchronized (playerLock) {
             playerLock.notifyAll();
+        }
+    }
+    
+    /**
+     * Sends move to player, if its human
+     * @param p Point
+     */
+    public void forceMove(Point p) {
+        if (this.players[this.currentPlayer] instanceof HumanPlayer) {
+            ((HumanPlayer) this.players[this.currentPlayer]).clickedAt(p);
         }
     }
     
