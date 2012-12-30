@@ -27,5 +27,12 @@ public enum GomokuBoardState {
      * 
      * @see GameRules
      */
-    FORBIDDEN   
+    FORBIDDEN,
+    
+    /**
+     * Winning field, meaning game is already won and this point was part of 
+     * the winning streak
+     *
+     */
+    WINNING
 }

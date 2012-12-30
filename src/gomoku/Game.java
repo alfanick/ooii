@@ -283,11 +283,14 @@ public class Game implements Runnable {
             // Player won the game!
             // UI shows some dialog and finished game
             // Gomoku.ui.showGameEnded(this.currentPlayer, ex);
-
+                        
             // Game is finished
             //System.out.printf("Koniec gry (%d,%d)\n", ex.getPosition().x, ex.getPosition().y);
-
-            this.board.set(ex.getPosition(), GomokuBoardState.values()[(this.currentPlayer+1)%2]);
+            GomokuBoardState s =  GomokuBoardState.values()[(this.currentPlayer+1)%2];
+            for( Point p : ex.getPoints()){
+                this.board.set(p, GomokuBoardState.WINNING);
+            }
+            
             Gomoku.ui.refresh();
                 
             //this.board.print("KONIEC");
@@ -295,7 +298,7 @@ public class Game implements Runnable {
             if (ex instanceof DrawGameEndedException) {
                 Gomoku.ui.showDrawMessage();
             } else {
-                Gomoku.ui.showWinnerMessage(ex.getPosition());
+                Gomoku.ui.showWinnerMessage(ex.getPosition(), s);
             }
         }
         
