@@ -265,10 +265,13 @@ public class Game implements Runnable {
                 if (!stopFlag && pauseFlag) {
                     synchronized (pauseLock) {
                         try {
+                            Gomoku.ui.gomokuUIBoard.paused = true;
                             pauseLock.wait();
                         } catch (InterruptedException ex) {
                             //Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                             pauseFlag = false;
+                        } finally {
+                            Gomoku.ui.gomokuUIBoard.paused = false;
                         }
                     }
                 }

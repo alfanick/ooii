@@ -113,7 +113,7 @@ public class GomokuUIBoard extends JComponent {
             g.drawLine(leftMargin + i * INTERSPACE, topMargin, leftMargin + i * INTERSPACE, topMargin + (vIntersectionsNumber + 1) * INTERSPACE);
         }
 
-        if (mousePositionX != -1 && mousePositionY != -1 && Gomoku.ui.list.isEnabled()) {
+        if (mousePositionX != -1 && mousePositionY != -1 && Gomoku.game != null && !paused) {
             if (Gomoku.game.referee.rules.getSizeRectangle().contains(new Point(mousePositionY, mousePositionX))) {
                 drawCircle(g);
             }

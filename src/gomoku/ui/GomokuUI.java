@@ -380,7 +380,7 @@ public class GomokuUI extends JFrame implements Runnable {
                 Gomoku.game.pause();
                 startButton.setText("Continue");
                 list.setEnabled(false);
-                gomokuUIBoard.paused = true;
+                //gomokuUIBoard.paused = true;
                 gomokuUIBoard.repaint();
                 
                 return;
@@ -388,7 +388,7 @@ public class GomokuUI extends JFrame implements Runnable {
                 Gomoku.game.resume();
                 startButton.setText("Pause");
                 list.setEnabled(true);
-                gomokuUIBoard.paused = false;
+                //gomokuUIBoard.paused = false;
                 gomokuUIBoard.repaint();
                 
                 return;
