@@ -269,12 +269,16 @@ public class GomokuUI extends JFrame implements Runnable {
         
         startButton.setText("Start");
     }
-    
-    public void showWinnerMessage(Point p) {
+    /**
+     * Displays a messagebox with winner and list pawn put on board
+     * @param p position of last pawn put on board
+     * @param state winning player's board state
+     */
+    public void showWinnerMessage(Point p, GomokuBoardState state) {
         StringBuilder sb = new StringBuilder();
         sb.append(GomokuUIBoard.letters[p.y]);
         sb.append(GomokuUIBoard.numbers[p.x]);
-        sb.append(Gomoku.game.board.get(p) == GomokuBoardState.A ? ", White" : ", Black");
+        sb.append(state == GomokuBoardState.A ? ", White" : ", Black");
         sb.append(" won!");
         
         startButton.setText("Start");
