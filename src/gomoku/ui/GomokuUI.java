@@ -437,7 +437,7 @@ public class GomokuUI extends JFrame implements Runnable {
                 "Board height:", field2,
                 "M-in-row:", field3,
                 "Time for white player:", field4,
-                "Time for nigger:", field5,
+                "Time for black player:", field5,
                 "First move x:", field6,
                 "First move y:", field7,
                 "First move board width:", field8,
