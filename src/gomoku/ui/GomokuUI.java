@@ -123,9 +123,11 @@ public class GomokuUI extends JFrame implements Runnable {
         
         File files = new File(".", "bots");
         for (String filename : files.list()) {
-            System.out.println(filename);
+            if (filename.endsWith(".jar")) {
+                System.out.println(filename);
             
-            players.add(filename.replaceAll(".jar", ""));
+                players.add(filename.replaceAll(".jar", ""));
+            }
         }
 
 
