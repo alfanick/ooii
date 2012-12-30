@@ -35,6 +35,7 @@ public class GameEndedException extends GomokuException {
     public GameEndedException(Point position, ArrayList<Point> gameWinningPoints) {
         super(position);
         winningPoints = gameWinningPoints;
+        winningPoints.add(position);
     }
     
     /**
