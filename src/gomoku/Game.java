@@ -78,6 +78,9 @@ public class Game implements Runnable {
         
         this.board = new GomokuBoard(rules.getSizeRectangle());
         this.board.cleanWithForbidden(rules.getFirstMoveRectangle());
+        
+        a.withBoardAndRules(this.board, rules);
+        b.withBoardAndRules(this.board, rules);
     }
     
     /**
