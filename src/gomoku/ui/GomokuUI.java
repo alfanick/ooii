@@ -1,6 +1,7 @@
 package gomoku.ui;
 
 import gomoku.*;
+import gomoku.player.Bot;
 import gomoku.player.HumanPlayer;
 import gomoku.player.PlayerInterface;
 import gomoku.player.TestPlayer;
@@ -119,6 +120,7 @@ public class GomokuUI extends JFrame implements Runnable {
         List<String> players = new ArrayList<>();
         players.add("Human");
         players.add("TestPlayer");
+        players.add("Asibot");
         
         
         File files = new File(".", "bots");
@@ -342,6 +344,8 @@ public class GomokuUI extends JFrame implements Runnable {
         } else {
             if (name.equals("TestPlayer")) {
                 player = new TestPlayer();
+            } else if (name.equals("Asibot")) {
+                player = new Bot();
             } else {
                 try {
                     StringBuilder fname = new StringBuilder();
