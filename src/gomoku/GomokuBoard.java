@@ -191,7 +191,11 @@ public class GomokuBoard {
      * @return State on this field.
      */
     public GomokuBoardState get(Point where) {
-        return this.board[where.x][where.y];
+        try {
+            return this.board[where.x][where.y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return GomokuBoardState.FORBIDDEN;
+        }
     }
     
     /**
