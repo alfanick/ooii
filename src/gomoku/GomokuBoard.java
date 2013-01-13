@@ -59,9 +59,8 @@ public class GomokuBoard {
      */
     public GomokuBoard(GomokuBoard board){
         this.board = board.getBoard().clone();
-        this.size = (Rectangle) board.getSize().clone();
-        this.lastMove = (Point) board.lastMove().clone();
-    
+        this.size = new Rectangle(board.getSize());
+        this.lastMove = new Point(board.lastMove());
     }    
     
     /**
