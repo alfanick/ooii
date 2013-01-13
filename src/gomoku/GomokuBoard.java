@@ -52,12 +52,43 @@ public class GomokuBoard {
     }
     
     /**
+     * Copy constructor. Creates a new GomokuBoard, which is a copy
+     * that given as parameter.
+     * 
+     * @param board Source GomokuBoard
+     */
+    public GomokuBoard(GomokuBoard board){
+        this.board = board.getBoard().clone();
+        this.size = (Rectangle) board.getSize().clone();
+        this.lastMove = (Point) board.lastMove().clone();
+    
+    }    
+    
+    /**
+     * Returns 2-D array of GomokuBoardStates - board
+     * 
+     * @return board
+     */
+    public GomokuBoardState[][] getBoard(){
+        return board;
+    }    
+    
+    /**
      * Returns last move made on board.
      * 
      * @return Last move
      */
     public Point lastMove() {
         return lastMove;
+    }
+    
+    /**
+     * Returns size of board.
+     * 
+     * @return size
+     */
+    public Rectangle getSize(){
+        return size;
     }
     
     /**
