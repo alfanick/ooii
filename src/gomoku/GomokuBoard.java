@@ -215,6 +215,21 @@ public class GomokuBoard {
     }
     
     /**
+     * Returns state on given position on board - access without Point
+     * 
+     * @param y - y coordinate
+     * @param x - x coordinate
+     * @return State on this field
+     */
+    public GomokuBoardState getState(int x, int y){
+        try {
+            return this.board[x][y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return GomokuBoardState.FORBIDDEN;
+        }
+    }
+    
+    /**
      * Get state on given position on board.
      * 
      * @param where Position
