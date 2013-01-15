@@ -34,15 +34,15 @@ public class Bot extends AIPlayer{
     public void run(){
     
         while(!Thread.interrupted()){
-            ab = new AlphaBeta(new Node(board, board.lastMove(), board.get(board.lastMove())), board.get(board.lastMove()));
+            ab = new AlphaBeta(new Node(new GomokuBoard(board), board.lastMove(), board.get(board.lastMove())), board.get(board.lastMove()));
             System.out.println("Starting Iterative Deepening of Alpha-Beta pruning");
-            for(int i=2; i<=MAXDEPTH; ++i) {
+            for(int i=6; i<=MAXDEPTH; ++i) {
                 position = ab.algorithm(i) ;
                 System.out.printf("Iterative Deepening finished! - depth %d, Position found (%d,%d)\n", i, position.x, position.y);            
             }
            
             System.out.println("Finished calculating, yielding cpu..");
-            //Gomoku.game.playerDone();
+            Gomoku.game.playerDone();
         }
     }
     

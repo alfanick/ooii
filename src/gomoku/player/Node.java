@@ -7,6 +7,7 @@ package gomoku.player;
 import gomoku.GomokuBoard;
 import gomoku.GomokuBoardState;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,8 +67,9 @@ public class Node {
         
         //Copies old board of points and adds new point that was selected
         //for this node
-        board = new GomokuBoard(oldBoard);
-        board.set(newMove, player);
+        this.board = oldBoard;
+        this.board.set(lastMove, player);
+        
     } 
     
     /**
@@ -77,22 +79,25 @@ public class Node {
         
         for(int i = 0; i<board.getSize().width; ++i){
             for(int j = 0; j<board.getSize().height; ++j){
-                for(int x=-1; x<=1; ++x){
-                    for(int y=-1; y<=1; ++y){
-                        if(board.get(new Point(i+x, j+y)) == GomokuBoardState.EMPTY) {
-                            adjacencyList.add(new Point(i+x,j+y));
+                if((board.getState(i,j) == GomokuBoardState.A )|| (board.getState(i,j) == GomokuBoardState.B)){
+                    for(int x=-1; x<=1; ++x){
+                        for(int y=-1; y<=1; ++y){
+                            if( ( board.getState(i+x, j+y) == GomokuBoardState.EMPTY )  &&  ( !adjacencyList.contains(new Point(i+x,j+y)) ) ) {
+                                adjacencyList.add(new Point(i+x,j+y));
+                                System.out.printf("%d %d\n", i+x, j+y);
+                            }
                         }
                     }
-                }
+                }     
             }
         }
         
 
         children = new HashMap<>();
         // Creates children based on adjacencyList
+        int i=0;
         for(Point p : adjacencyList){
-            int i=0;
-            children.put(i, new Node(board, p, lastPlayer == GomokuBoardState.A ? GomokuBoardState.B : GomokuBoardState.A));
+            children.put(i, new Node(new GomokuBoard(board), p, lastPlayer == GomokuBoardState.A ? GomokuBoardState.B : GomokuBoardState.A));
             i++;
         }
     }
@@ -101,9 +106,10 @@ public class Node {
     /**
      * Evaluation function for leaves 
      * 
+     * @param minmax 1 states for max, -1 states for min
      * @return integer which is an evaluation of leaves 
      */
-    public Integer evaluate(){
+    public Integer evaluate(int minmax){
         
         Integer result = 0;
         
@@ -123,13 +129,13 @@ public class Node {
                         }
                     }
                     if(flag)
-                        result += i*10;
+                        result += i*10*minmax;
                 }
             }
             
             //Analyze rows
             for(int y=0; y < board.getSize().height; ++y){
-                for(int x=0; x < board.getSize().width - x + 1; ++y){
+                for(int x=0; x < board.getSize().width - x + 1; ++x){
                     boolean flag = true;
                     for(int k=0; k < i-1; ++k){
                         if(board.getState(x+k, y) != lastPlayer){
@@ -138,7 +144,7 @@ public class Node {
                         }
                     }
                     if(flag)
-                        result += i*10;
+                        result += i*10*minmax;
                 }
             }
         
@@ -153,7 +159,7 @@ public class Node {
                         }
                     }
                     if(flag)
-                        result += i*10;
+                        result += i*10*minmax;
                 }
             }
             
@@ -168,7 +174,7 @@ public class Node {
                         }
                     }
                     if(flag)
-                        result += i*10;
+                        result += i*10*minmax;
                 }
             }
         }

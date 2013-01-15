@@ -58,7 +58,14 @@ public class GomokuBoard {
      * @param board Source GomokuBoard
      */
     public GomokuBoard(GomokuBoard board){
-        this.board = board.getBoard().clone();
+        //this.board = (GomokuBoardState[][]) board.getBoard().clone();
+        this.board = new GomokuBoardState[board.getSize().width][board.getSize().height];
+        for(int i=0; i<board.getSize().width; ++i){
+            for(int j=0; j<board.getSize().height; j++){
+                this.board[i][j] = board.getState(i,j);
+            }
+        }
+        
         this.size = new Rectangle(board.getSize());
         this.lastMove = new Point(board.lastMove());
     }    

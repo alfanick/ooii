@@ -402,8 +402,8 @@ public class GomokuUI extends JFrame implements Runnable {
             JTextField field1 = new JTextField("19");            
             JTextField field2 = new JTextField("19");
             JTextField field3 = new JTextField("5");            
-            JTextField field4 = new JTextField("0.1");            
-            JTextField field5 = new JTextField("0.1");            
+            JTextField field4 = new JTextField("30.0");            
+            JTextField field5 = new JTextField("3600.0");            
             JTextField field6 = new JTextField("7");            
             JTextField field7 = new JTextField("7");
             JTextField field8 = new JTextField("5");            
@@ -418,12 +418,12 @@ public class GomokuUI extends JFrame implements Runnable {
                     if (((String) combobox1.getSelectedItem()).equals("Human")) {
                         timeWhite = 30.0f;
                     } else {
-                        timeWhite = 0.1f;
+                        timeWhite = 3600.0f;
                     }
                     if (((String) combobox2.getSelectedItem()).equals("Human")) {
                         timeBlack = 30.0f;
                     } else {
-                        timeBlack = 0.1f;
+                        timeBlack = 3600.0f;
                     }
                 }
                 

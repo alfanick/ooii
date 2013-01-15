@@ -59,7 +59,7 @@ public class AlphaBeta {
         // if depth is equal to 0, then we return eval function of current node
         // *we assume we can't reach terminal nodes, so we dont check for them*
         if(depth == 0){
-            Pair<Integer, Point> pair = new Pair(node.evaluate(), node.getLastMove());
+            Pair<Integer, Point> pair = new Pair(node.evaluate( player == me ? 1 : -1), node.getLastMove());
             System.out.printf("Eval func:  %d\n", pair.first);
             return pair;
         }
